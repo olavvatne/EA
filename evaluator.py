@@ -1,3 +1,7 @@
+from abc import ABCMeta, abstractmethod
 
-def AbstractFitnessEvaluator(object):
-    pass
+def AbstractFitnessEvaluator(metaclass=ABCMeta):
+
+    @abstractmethod
+    def evaluate(self, population):
+        pass
