@@ -1,7 +1,12 @@
 
 
 class AbstractPhenotype(object):
-    pass
+
+    def __init__(self):
+        pass
+
 
 class IntegerPhenotype(AbstractPhenotype):
-    pass
+
+    def __init__(self, data):
+        self.phenotype = data

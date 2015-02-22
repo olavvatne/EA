@@ -1,12 +1,14 @@
 from abc import ABCMeta, abstractmethod
 
+
 class FitnessEvaluatorFactory:
     DEFAULT = "default"
-    
+
     @staticmethod
     def make_fitness_evaluator(evaluator=DEFAULT):
         evaluators = {FitnessEvaluatorFactory.DEFAULT:DefaultFitnessEvaluator}
         return evaluators[evaluator]()
+
 
 class AbstractFitnessEvaluator(metaclass=ABCMeta):
 
@@ -15,8 +17,11 @@ class AbstractFitnessEvaluator(metaclass=ABCMeta):
         pass
 
     def evaluateAll(self, population):
+        #TODO: Should evaluation be done for already adult individuals. Maybe not. Operation can
+        #Be expensive. 
         for individual in population:
-            self.evaluate(individual)
+            individual.fitness = self.evaluate(individual)
+
 
 class DefaultFitnessEvaluator(AbstractFitnessEvaluator):
     #For the simple problem. Put this here so the EA works without extension classes

@@ -1,15 +1,22 @@
 from abc import ABCMeta, abstractmethod
 import numpy as np
 
+
 class GenotypeFactory:
     DEFAULT = "default"
 
     @staticmethod
     def make_fitness_genotype(genotype=DEFAULT):
-        genotypes = {GenotypeFactory.DEFAULT:GenotypeFactory}
+        genotypes = {GenotypeFactory.DEFAULT:BitVectorGenotype}
         return genotypes[genotype]()
 
+
 class AbstractGenotype(metaclass=ABCMeta):
+
+    def __init__(self):
+        #TODO: Should genotype be initialized to zeroes, or parameter decide what to do.
+        #Random init or copying operation
+        self.genotype = None
 
     @abstractmethod
     def init_random_genotype(self, n):
@@ -19,16 +26,15 @@ class AbstractGenotype(metaclass=ABCMeta):
     def create_instance(self):
         pass
 
+    def __repr__(self):
+        return str(self.genotype)
+
+
 class BitVectorGenotype(AbstractGenotype):
     #Default genotype, for testing purposes.
 
-    def __init__(self, length):
-        #TODO: Should genotype be initialized to zeroes, or parameter decide what to do.
-        #Random init or copying operation
-        self.genotype = np.zeroes(length)
-
     def init_random_genotype(self, n):
-        self.genotype = np.random.randInt(2, size=(n,))
+        self.genotype = np.random.randint(2, size=n)
 
     def create_instance(self):
         #TODO: IS THIS NEEDED. FACTORY METHOD

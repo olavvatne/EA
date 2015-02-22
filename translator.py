@@ -1,5 +1,7 @@
 from abc import ABCMeta, abstractmethod
 import numpy as np
+from phenotype import IntegerPhenotype
+
 
 class TranslatorFactory:
     DEFAULT = "default"
@@ -18,11 +20,13 @@ class AbstractTranslator(metaclass=ABCMeta):
     def develop(self, individual):
         pass
 
+
 class DefaultTranslator(AbstractTranslator):
 
     def develop(self, individual):
         #For the first problem, no development is necessary
-        individual.phenotype = np.copy(individual.genotype)
+        return IntegerPhenotype(np.copy(individual.genotype))
+
 
 class BinToIntTranslator(AbstractTranslator):
 
