@@ -8,5 +8,5 @@ class AbstractPhenotype(object):
 
 class IntegerPhenotype(AbstractPhenotype):
 
-    def __init__(self, data):
-        self.phenotype = data
+    def __init__(self, phenotype):
+        self.phenotype = phenotype

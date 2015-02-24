@@ -26,6 +26,10 @@ class AbstractGenotype(metaclass=ABCMeta):
     def create_instance(self):
         pass
 
+    @abstractmethod
+    def copy(self):
+        pass
+
     def __repr__(self):
         return str(self.genotype)
 
@@ -35,6 +39,11 @@ class BitVectorGenotype(AbstractGenotype):
 
     def init_random_genotype(self, n):
         self.genotype = np.random.randint(2, size=n)
+
+    def copy(self):
+        g = BitVectorGenotype()
+        g.genotype = self.genotype.copy()
+        return g
 
     def create_instance(self):
         #TODO: IS THIS NEEDED. FACTORY METHOD

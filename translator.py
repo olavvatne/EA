@@ -25,7 +25,7 @@ class DefaultTranslator(AbstractTranslator):
 
     def develop(self, individual):
         #For the first problem, no development is necessary
-        return IntegerPhenotype(np.copy(individual.genotype))
+        return IntegerPhenotype(np.copy(individual.genotype_container.genotype))
 
 
 class BinToIntTranslator(AbstractTranslator):

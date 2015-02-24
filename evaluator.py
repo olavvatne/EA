@@ -1,5 +1,5 @@
 from abc import ABCMeta, abstractmethod
-
+import numpy as np
 
 class FitnessEvaluatorFactory:
     DEFAULT = "default"
@@ -16,9 +16,9 @@ class AbstractFitnessEvaluator(metaclass=ABCMeta):
     def evaluate(self, individual):
         pass
 
-    def evaluateAll(self, population):
+    def evaluate_all(self, population):
         #TODO: Should evaluation be done for already adult individuals. Maybe not. Operation can
-        #Be expensive. 
+        #Be expensive.
         for individual in population:
             individual.fitness = self.evaluate(individual)
 
@@ -28,4 +28,5 @@ class DefaultFitnessEvaluator(AbstractFitnessEvaluator):
     NUMBER_ONE = 1
 
     def evaluate(self, individual):
-        return individual.phenotype.count(DefaultFitnessEvaluator.NUMBER_ONE)/len(individual.phenotype)
+        p = individual.phenotype_container.phenotype
+        return np.sum(p) / p.size
