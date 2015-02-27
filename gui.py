@@ -152,6 +152,7 @@ class Graph(Frame):
         self.yList = []
 
         canvas = FigureCanvasTkAgg(self.f, self)
+        canvas._tkcanvas.config(highlightthickness=0)
         canvas.show()
         canvas.get_tk_widget().pack(side=BOTTOM, fill=BOTH, expand=True)
         canvas._tkcanvas.pack(side=TOP, fill=BOTH, expand=True)
