@@ -1,5 +1,10 @@
 from tkinter import *
 from tkinter import ttk, filedialog, messagebox
+import matplotlib
+matplotlib.use("TkAgg")
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
+from matplotlib.figure import Figure
+
 from ea import EA
 
 import threading
@@ -58,13 +63,13 @@ class AppUI(Frame):
         self.a_selection.grid(row=5, column=0, sticky=W, padx=4, pady=4)
 
         self.population_size = LabelledEntry(self, "Pop size", 20)
-        self.population_size.grid(row=0, column=1, padx=2, pady=4)
+        self.population_size.grid(row=0, column=1, padx=4, pady=8)
 
         self.generations = LabelledEntry(self, "Cycles", 100)
-        self.generations.grid(row=0, column=2, padx=2, pady=4)
+        self.generations.grid(row=0, column=2, padx=4, pady=8)
 
         self.genome_length = LabelledEntry(self, "Genome length", 20)
-        self.genome_length.grid(row=0, column=3, padx=2, pady=4)
+        self.genome_length.grid(row=0, column=3, padx=4, pady=8)
 
         self.average_fitness = Label(self, text="Avg fitness: ")
         self.average_fitness.grid(row=1, column=1, sticky=W ,padx=2, pady=4)
@@ -78,6 +83,9 @@ class AppUI(Frame):
 
         self.progress = ttk.Progressbar(self, orient='horizontal')
         self.progress.grid(row=6, column=0, columnspan=4, sticky="WE")
+
+        self.graph = Graph(self)
+        self.graph.grid(row=3, column=1, columnspan=3, rowspan=4)
 
         self.columnconfigure(0, minsize="150")
 
@@ -113,6 +121,13 @@ class LabelledEntry(Frame):
 
     def get(self):
         return int(self.content.get())
+
+
+class Graph(Frame):
+    def __init__(self, parent):
+        Frame.__init__(self, parent)
+        label = Label(self, text="Graph Page!")
+        label.pack(pady=10,padx=10)
 
 
 def stop_ea(*args):

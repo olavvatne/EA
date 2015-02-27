@@ -29,12 +29,14 @@ class EA(object):
         self.listener = listener
 
     def run(self, population_size, cycles, fitness_threshold):
+        #TODO: Make fitness threshold optional, and settable in GUI
+
         if not self.is_legal():
             raise RuntimeError("Cannot run EA. Lack neccessary objects")
 
         children = self.create_population(population_size)  #Inital population
         self.adult_pool = []
-        #TODO: stop if provided threshold is reached
+
         for c in range(cycles):
 
             self.geno_to_pheno_development(children)
