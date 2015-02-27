@@ -10,7 +10,8 @@ class EA(object):
     #Create python file with methods that return object, with the right mix of fitness eval, phenotype etc, can be used
     #a setup type of method that configure the EA before running. Drop down with alternatives in gui, pop size etc d
     #decided by other gui elements
-    pass
+
+    EVENT_RATE = 10
 
     def __init__(self):
         self.is_stopping = False
@@ -22,6 +23,7 @@ class EA(object):
         self.adult_selector = None
         self.parent_selector = None
         self.listener = None
+        self.adult_pool = []
 
     def add_listener(self, listener):
         self.listener = listener
@@ -31,38 +33,39 @@ class EA(object):
             raise RuntimeError("Cannot run EA. Lack neccessary objects")
 
         children = self.create_population(population_size)  #Inital population
-        adult_pool = []
+        self.adult_pool = []
         #TODO: stop if provided threshold is reached
         for c in range(cycles):
 
             self.geno_to_pheno_development(children)
             self.fitness_evaluator.evaluate_all(children)
-            adult_pool = self.adult_selector.select(adult_pool, children, population_size)
-            mating_adults = self.parent_selector.select_mating_pool(adult_pool)
+            self.adult_pool = self.adult_selector.select(self.adult_pool, children, population_size)
+            mating_adults = self.parent_selector.select_mating_pool(self.adult_pool)
             children = []
             for a1, a2 in mating_adults:
                 children.append(a1.mate(a2))
 
-            if self.is_stopping:
+            best_fitness = self.best_fitness(self.adult_pool)
+            if self.is_stopping or fitness_threshold <= best_fitness:
                 self.is_stopping = False
+                self.send_update(cycles, best_fitness)
                 break
 
-            if self.listener and c%10 == 0:
+            if self.listener and c%EA.EVENT_RATE == 0:
                 #Sends an update every 10th cycle. Fraction multiplied by 100 and 10 (10th cyle)
                 #send to indicate evolution loop progression.
-                progression = 1/cycles * 1000
-                avg_fitness = self.avg_fitness(adult_pool)
-                best_fitness = self.best_fitness(adult_pool)
-                self.send_update(progression, avg_fitness, best_fitness)
-        print(adult_pool)
-        print(self.best_fitness(adult_pool))
+                self.send_update(cycles, best_fitness)
+
+        print(self.adult_pool)
+        print(self.best_fitness(self.adult_pool))
 
     def stop(self):
         self.is_stopping = True
 
-    def send_update(self, progression, avg_fitness, best_fitness):
+    def send_update(self, cycles, best_fitness):
         #Send stuff to be displayed
-        self.listener.update(progression, avg_fitness, best_fitness)
+        avg_fitness = self.avg_fitness(self.adult_pool)
+        self.listener.update(1/cycles * 100 * EA.EVENT_RATE, avg_fitness, best_fitness)
 
     def best_fitness(self, adults):
         return max(adult.fitness for adult in adults)
