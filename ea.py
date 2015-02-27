@@ -50,13 +50,13 @@ class EA(object):
             best_fitness = self.best_fitness(self.adult_pool)
             if self.is_stopping or fitness_threshold <= best_fitness:
                 self.is_stopping = False
-                self.send_update(cycles, best_fitness)
+                self.send_update(c, cycles, best_fitness)
                 break
 
             if self.listener and c%EA.EVENT_RATE == 0:
                 #Sends an update every 10th cycle. Fraction multiplied by 100 and 10 (10th cyle)
                 #send to indicate evolution loop progression.
-                self.send_update(cycles, best_fitness)
+                self.send_update(c, cycles, best_fitness)
 
         print(self.adult_pool)
         print(self.best_fitness(self.adult_pool))
@@ -64,10 +64,10 @@ class EA(object):
     def stop(self):
         self.is_stopping = True
 
-    def send_update(self, cycles, best_fitness):
+    def send_update(self, c, cycles, best_fitness):
         #Send stuff to be displayed
         avg_fitness = self.avg_fitness(self.adult_pool)
-        self.listener.update(1/cycles * 100 * EA.EVENT_RATE, avg_fitness, best_fitness)
+        self.listener.update(c, 1/cycles * 100 * EA.EVENT_RATE, avg_fitness, best_fitness)
 
     def best_fitness(self, adults):
         return max(adult.fitness for adult in adults)

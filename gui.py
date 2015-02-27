@@ -4,6 +4,9 @@ import matplotlib
 matplotlib.use("TkAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
 from matplotlib.figure import Figure
+import matplotlib.animation as animation
+from matplotlib import style
+style.use('ggplot')
 
 from ea import EA
 
@@ -81,19 +84,26 @@ class AppUI(Frame):
         self.best_fitness_value = Label(self, text="0")
         self.best_fitness_value.grid(row=1, column=2, sticky=E ,padx=2, pady=4)
 
+        self.cycles = Label(self, text="Cycles: ")
+        self.cycles.grid(row=1, column=3, sticky=W ,padx=2, pady=4)
+        self.cycles_value = Label(self, text="0")
+        self.cycles_value.grid(row=1, column=3, sticky=E ,padx=2, pady=4)
+
         self.progress = ttk.Progressbar(self, orient='horizontal')
         self.progress.grid(row=6, column=0, columnspan=4, sticky="WE")
 
         self.graph = Graph(self)
-        self.graph.grid(row=3, column=1, columnspan=3, rowspan=4)
+        self.graph.grid(row=2, column=1, columnspan=3, rowspan=4)
 
         self.columnconfigure(0, minsize="150")
 
 
-    def update(self, p, cf, bf):
+    def update(self, c, p, cf, bf):
         self.progress.step(p)
         self.average_fitness_value.configure(text=str(cf))
         self.best_fitness_value.configure(text=str(bf))
+        self.cycles_value.configure(text=str(c))
+        self.graph.add(c, bf)
 
 class LabelledSelect(Frame):
     def __init__(self, parent, options, label_text, *args, **kwargs):
@@ -124,10 +134,32 @@ class LabelledEntry(Frame):
 
 
 class Graph(Frame):
+    #TODO: Clean up code
+
     def __init__(self, parent):
         Frame.__init__(self, parent)
-        label = Label(self, text="Graph Page!")
-        label.pack(pady=10,padx=10)
+        self.f = Figure()
+        self.a = self.f.add_subplot(111)
+        #a.plot([1,2,3,4,5,6,7,8],[5,6,1,3,8,9,3,5])
+        self.xList = []
+        self.yList = []
+
+        canvas = FigureCanvasTkAgg(self.f, self)
+        canvas.show()
+        canvas.get_tk_widget().pack(side=BOTTOM, fill=BOTH, expand=True)
+        canvas._tkcanvas.pack(side=TOP, fill=BOTH, expand=True)
+
+    def add(self, x, y):
+        self.xList.append(x)
+        self.yList.append(y)
+
+    def animate(self, i):
+        self.a.clear()
+        self.a.plot(self.xList, self.yList)
+
+    def clear(self):
+        self.xList = []
+        self.yList = []
 
 
 def stop_ea(*args):
@@ -141,6 +173,7 @@ def run_ea(*args):
                  app.a_selection.get(),
                  app.p_selection.get(),
                  app.genome_length.get())
+    app.graph.clear()
 
     def callback():
         pop_size = app.population_size.get()
@@ -164,6 +197,7 @@ root.title("EA problem solver system")
 app = AppUI(root)
 root.bind('<Return>', run_ea)
 ea_system = EA()
+ani = animation.FuncAnimation(app.graph.f, app.graph.animate, interval=500)
 ea_system.add_listener(app)
 
 root.mainloop()
