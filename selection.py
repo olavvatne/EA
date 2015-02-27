@@ -26,7 +26,7 @@ class FullReplacementAdultSelection(AbstractAdultSelection):
         All Adults from the previous generation are removed from the pool eligible for
         reproduction.
     '''
-    def select(self, adults, children):
+    def select(self, adults, children, m):
 
         return children
 
@@ -35,15 +35,15 @@ class OverProductionAdultSelection(AbstractAdultSelection):
     Over-production create selection pressure by letting the n children compete for
     the m spots in the adult_pool. This require that more n > m.
     '''
-    def select(self, adults, children):
-        m = len(adults) #TODO: parameter?
+    def select(self, adults, children, m):
         #TODO: Here a heap would be good?
-        return children
+        adult_pool = sorted(children, key=lambda child:child.fitness, reverse=True)
+        return adult_pool[:m]
 
 
 class MixingAdultSelection(AbstractAdultSelection):
 
-    def select(self, adults, children):
+    def select(self, adults, children, m):
         return children
 
 

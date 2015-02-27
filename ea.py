@@ -37,7 +37,7 @@ class EA(object):
 
             self.geno_to_pheno_development(children)
             self.fitness_evaluator.evaluate_all(children)
-            adult_pool = self.adult_selector.select(adult_pool, children)
+            adult_pool = self.adult_selector.select(adult_pool, children, population_size)
             mating_adults = self.parent_selector.select_mating_pool(adult_pool)
             children = []
             for a1, a2 in mating_adults:
@@ -54,8 +54,8 @@ class EA(object):
                 avg_fitness = self.avg_fitness(adult_pool)
                 best_fitness = self.best_fitness(adult_pool)
                 self.send_update(progression, avg_fitness, best_fitness)
-        print(adults)
-        print(self.best_fitness(adults))
+        print(adult_pool)
+        print(self.best_fitness(adult_pool))
 
     def stop(self):
         self.is_stopping = True
