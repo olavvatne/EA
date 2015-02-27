@@ -31,14 +31,14 @@ class EA(object):
             raise RuntimeError("Cannot run EA. Lack neccessary objects")
 
         children = self.create_population(population_size)  #Inital population
-        adults = []
+        adult_pool = []
         #TODO: stop if provided threshold is reached
         for c in range(cycles):
 
             self.geno_to_pheno_development(children)
             self.fitness_evaluator.evaluate_all(children)
-            adults = self.adult_selector.select(adults, children)
-            mating_adults = self.parent_selector.select_mating_pool(adults)
+            adult_pool = self.adult_selector.select(adult_pool, children)
+            mating_adults = self.parent_selector.select_mating_pool(adult_pool)
             children = []
             for a1, a2 in mating_adults:
                 children.append(a1.mate(a2))
@@ -51,8 +51,8 @@ class EA(object):
                 #Sends an update every 10th cycle. Fraction multiplied by 100 and 10 (10th cyle)
                 #send to indicate evolution loop progression.
                 progression = 1/cycles * 1000
-                avg_fitness = self.avg_fitness(adults)
-                best_fitness = self.best_fitness(adults)
+                avg_fitness = self.avg_fitness(adult_pool)
+                best_fitness = self.best_fitness(adult_pool)
                 self.send_update(progression, avg_fitness, best_fitness)
         print(adults)
         print(self.best_fitness(adults))

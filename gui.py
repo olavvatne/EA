@@ -116,8 +116,8 @@ class LabelledEntry(Frame):
 
 
 def stop_ea(*args):
-    print("STOP")
     ea_system.stop()
+
 
 def run_ea(*args):
     ea_system.setup(app.translator.get(),
@@ -126,7 +126,7 @@ def run_ea(*args):
                  app.a_selection.get(),
                  app.p_selection.get(),
                  app.genome_length.get())
-    #app.progress.start(50)
+
     def callback():
         pop_size = app.population_size.get()
         gen = app.generations.get()

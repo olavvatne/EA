@@ -22,23 +22,28 @@ class AbstractAdultSelection(metaclass=ABCMeta):
 
 
 class FullReplacementAdultSelection(AbstractAdultSelection):
-
-    def select(self, adults, children):
-        '''
+    '''
         All Adults from the previous generation are removed from the pool eligible for
         reproduction.
-        '''
+    '''
+    def select(self, adults, children):
+
         return children
 
 class OverProductionAdultSelection(AbstractAdultSelection):
-
+    '''
+    Over-production create selection pressure by letting the n children compete for
+    the m spots in the adult_pool. This require that more n > m.
+    '''
     def select(self, adults, children):
-        pass
+        m = len(adults) #TODO: parameter?
+        #TODO: Here a heap would be good?
+        return children
 
 
 class MixingAdultSelection(AbstractAdultSelection):
 
     def select(self, adults, children):
-        pass
+        return children
 
 
