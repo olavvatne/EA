@@ -90,12 +90,19 @@ class AppUI(Frame):
         self.cycles_value.grid(row=1, column=3, sticky=E ,padx=2, pady=4)
 
         self.progress = ttk.Progressbar(self, orient='horizontal')
-        self.progress.grid(row=6, column=0, columnspan=4, sticky="WE")
+        self.progress.grid(row=6, column=0, columnspan=4, sticky="WES")
 
         self.graph = Graph(self)
-        self.graph.grid(row=2, column=1, columnspan=3, rowspan=4)
+        self.graph.grid(row=2, column=1, columnspan=3, rowspan=4, sticky="WNSE")
 
         self.columnconfigure(0, minsize="150")
+        self.columnconfigure(1, weight=1)
+        self.columnconfigure(2, weight=1)
+        self.columnconfigure(3, weight=1)
+        self.rowconfigure(2,weight=1)
+        self.rowconfigure(3,weight=1)
+        self.rowconfigure(4,weight=1)
+        self.rowconfigure(5,weight=1)
 
 
     def update(self, c, p, cf, bf):
