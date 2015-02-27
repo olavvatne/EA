@@ -44,6 +44,9 @@ class OverProductionAdultSelection(AbstractAdultSelection):
 class MixingAdultSelection(AbstractAdultSelection):
 
     def select(self, adults, children, m):
-        return children
+        #TODO. Maybe heap impl for lists?
+        mix = adults + children
+        adult_pool = sorted(mix, key=lambda individual:individual.fitness, reverse=True)
+        return adult_pool[:m]
 
 
