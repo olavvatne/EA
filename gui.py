@@ -115,7 +115,7 @@ class AppUI(Frame):
         self.average_fitness_value.configure(text=str(cf))
         self.best_fitness_value.configure(text=str(bf))
         self.cycles_value.configure(text=str(c))
-        self.graph.add(c, bf, cf)
+        self.graph.add(c, bf, cf, std)
 
 class LabelledSelect(Frame):
     def __init__(self, parent, options, label_text, *args, **kwargs):
@@ -168,10 +168,12 @@ class Graph(Frame):
     def __init__(self, parent):
         Frame.__init__(self, parent)
         self.f = Figure()
-        self.a = self.f.add_subplot(111)
+        self.a = self.f.add_subplot(211)
+        self.b = self.f.add_subplot(212)
         self.x_list = []
         self.bf_list = []
         self.af_list = []
+        self.std_list = []
 
         canvas = FigureCanvasTkAgg(self.f, self)
         canvas._tkcanvas.config(highlightthickness=0)
@@ -179,21 +181,26 @@ class Graph(Frame):
         canvas.get_tk_widget().pack(side=BOTTOM, fill=BOTH, expand=True)
         canvas._tkcanvas.pack(side=TOP, fill=BOTH, expand=True)
 
-    def add(self, x, bf, af):
+    def add(self, x, bf, af, std):
         self.x_list.append(x)
         self.bf_list.append(bf)
         self.af_list.append(af)
+        self.std_list.append(std)
 
     def animate(self, i):
         self.a.clear()
+        self.b.clear()
         self.a.plot(self.x_list, self.bf_list, label="Best")
         self.a.plot(self.x_list, self.af_list, label="Average")
-        self.a.legend( loc='upper left' )
+        self.b.plot(self.x_list, self.std_list, label="Std")
+        self.a.legend( loc='lower right' )
+        self.b.legend( loc='top right' )
 
     def clear(self):
         self.x_list = []
         self.bf_list = []
         self.af_list = []
+        self.std_list = []
 
 
 def stop_ea(*args):
