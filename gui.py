@@ -47,7 +47,7 @@ class AppUI(Frame):
             "translator": ["default", "integer"],
             "parent_selection": ["proportionate", "sigma", "tournament"],
             "adult_selection": ["full", "over", "mixing"],
-            "fitness": ["default"]
+            "fitness": ["default", "leading"]
         }
 
         self.genotype = LabelledSelect(self, options["genotype"], "Genotype")
@@ -60,10 +60,10 @@ class AppUI(Frame):
         self.fitness.grid(row=4, column=0, sticky=W, padx=4, pady=4)
 
         self.p_selection = LabelledSelect(self, options["parent_selection"], "Parent selection")
-        self.p_selection.grid(row=4, column=0, sticky=W, padx=4, pady=4)
+        self.p_selection.grid(row=5, column=0, sticky=W, padx=4, pady=4)
 
         self.a_selection = LabelledSelect(self, options["adult_selection"], "Adult selection")
-        self.a_selection.grid(row=5, column=0, sticky=W, padx=4, pady=4)
+        self.a_selection.grid(row=6, column=0, sticky=W, padx=4, pady=4)
 
         self.population_size = LabelledEntry(self, "Pop size", 20)
         self.population_size.grid(row=0, column=1, padx=4, pady=8)
@@ -90,10 +90,10 @@ class AppUI(Frame):
         self.cycles_value.grid(row=1, column=3, sticky=E ,padx=2, pady=4)
 
         self.progress = ttk.Progressbar(self, orient='horizontal')
-        self.progress.grid(row=6, column=0, columnspan=4, sticky="WES")
+        self.progress.grid(row=7, column=0, columnspan=4, sticky="WES")
 
         self.graph = Graph(self)
-        self.graph.grid(row=2, column=1, columnspan=3, rowspan=4, sticky="WNSE")
+        self.graph.grid(row=2, column=1, columnspan=3, rowspan=5, sticky="WNSE")
 
         self.columnconfigure(0, minsize="150")
         self.columnconfigure(1, weight=1)
@@ -103,6 +103,7 @@ class AppUI(Frame):
         self.rowconfigure(3,weight=1)
         self.rowconfigure(4,weight=1)
         self.rowconfigure(5,weight=1)
+        self.rowconfigure(6,weight=1)
 
 
     def update(self, c, p, cf, bf):
@@ -186,7 +187,7 @@ def run_ea(*args):
     def callback():
         pop_size = app.population_size.get()
         gen = app.generations.get()
-        ea_system.run(pop_size, gen, 1.0)
+        ea_system.run(pop_size, gen, 6.0)
         app.progress.stop()
     t = threading.Thread(target=callback)
     t.daemon = True

@@ -3,10 +3,12 @@ import numpy as np
 
 class FitnessEvaluatorFactory:
     DEFAULT = "default"
+    LEADING = "leading"
 
     @staticmethod
     def make_fitness_evaluator(evaluator=DEFAULT):
-        evaluators = {FitnessEvaluatorFactory.DEFAULT:DefaultFitnessEvaluator}
+        evaluators = {FitnessEvaluatorFactory.DEFAULT:DefaultFitnessEvaluator,
+                      FitnessEvaluatorFactory.LEADING:LeadingFitnessEvaluator}
         return evaluators[evaluator]()
 
 
@@ -30,3 +32,24 @@ class DefaultFitnessEvaluator(AbstractFitnessEvaluator):
     def evaluate(self, individual):
         p = individual.phenotype_container.phenotype
         return np.sum(p) / p.size
+
+class LeadingFitnessEvaluator(AbstractFitnessEvaluator):
+    #For LOLZ prefix problem
+
+
+    def evaluate(self, individual):
+        z = 4 #TODO: gui set this parameter. must be kwargs or something
+        p = individual.phenotype_container.phenotype
+        leading = p[0]
+        score = 0
+        for n in p:
+            if n == leading:
+                score += 1
+            else:
+                break
+        if leading == 1:
+            return score
+        else:
+            if score > z:
+                return z
+            return score
