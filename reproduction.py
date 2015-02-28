@@ -50,12 +50,22 @@ class ParentFitnessProportionateSelection(AbstractParentSelection):
 class ParentSigmaScalingSelection(AbstractParentSelection):
 
     def select_mating_pool(self, population, m):
-        fitness = list(a.fitness for a in population)
-        avg = sum(fitness)/len(population)
-        std = statistics.pstdev(fitness)
-        exp_values = list((1+((f - avg)/2*std)) for f in fitness)
-        probs = list(e/len(population) for e in exp_values)
+        #s = sum(a.fitness for a in population)
+        #TODO: exp_values contain negative values
+        #TODO: Find out what is done wrong
+        fitness_list = list(a.fitness for a in population)
 
+        avg = sum(fitness_list)/len(population)
+        std = np.std(fitness_list)
+        exp_values = list((1+((f -avg)/(2*std))) for f in fitness_list)
+        print("-----------------------------------------------------")
+        print("avg: ", avg, "std: ", std)
+        print(fitness_list)
+        for i, v in enumerate(exp_values):
+            if v<0:
+                print("i: ", population[i], "v: ", v, "f: ", fitness_list[i], " avg: ", avg, " std", std)
+        #print(exp_values)
+        probs = list(e/len(population) for e in exp_values)
         return self._global_weighted_select(population, probs, m)
 
 

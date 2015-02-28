@@ -31,7 +31,7 @@ class DefaultFitnessEvaluator(AbstractFitnessEvaluator):
 
     def evaluate(self, individual):
         p = individual.phenotype_container.phenotype
-        return np.sum(p) / p.size
+        return (np.sum(p) / p.size)
 
 class LeadingFitnessEvaluator(AbstractFitnessEvaluator):
     #For LOLZ prefix problem
