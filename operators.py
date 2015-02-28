@@ -12,14 +12,14 @@ class GeneticOperators(object):
         crossoverpoint = math.floor(random.uniform(0, genotype1.genotype.size))
         #print(crossoverpoint)
         cg1 = genotype1.copy()
-        #cg2 = genotype2.copy()
+        cg2 = genotype2.copy()
         cg1.genotype[:crossoverpoint] = genotype2.genotype[:crossoverpoint]
         #print("----------")
         #print(cg1)
         #print(genotype1)
         #print("--------------")
-        #cg2.genotype[crossoverpoint:] = genotype1.genotype[crossoverpoint:]
-        return cg1#, cg2
+        cg2.genotype[crossoverpoint:] = genotype1.genotype[crossoverpoint:]
+        return cg1, cg2
 
     @staticmethod
     def muatation(genotype):

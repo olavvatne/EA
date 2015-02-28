@@ -23,18 +23,18 @@ class ParentSelectionFactory:
 class AbstractParentSelection(metaclass=ABCMeta):
 
     @abstractmethod
-    def select_mating_pool(self, adults):
+    def select_mating_pool(self, adults, m):
         pass
 
 
 class ParentFitnessProportionateSelection(AbstractParentSelection):
 
-     def select_mating_pool(self, population):
+     def select_mating_pool(self, population, m):
         #TODO:Should method return mating pairs or children directy.
         #TODO: Semantically it is best to return pairs and let another method combine them
         max = sum(adult.fitness for adult in population)
         mate_pool = []
-        for i in range(len(population)):
+        for i in range(int(m/2)):
             a1 = self.pick_adult(population, random.uniform(0, max))
             a2 = self.pick_adult(population, random.uniform(0, max))
             mate_pool.append((a1, a2))
@@ -50,11 +50,11 @@ class ParentFitnessProportionateSelection(AbstractParentSelection):
 
 class ParentSigmaScalingSelection(AbstractParentSelection):
 
-     def select_mating_pool(self, adults):
+     def select_mating_pool(self, adults, m):
         return adults
 
 
 class ParentTournamentSelection(AbstractParentSelection):
 
-     def select_mating_pool(self, adults):
+     def select_mating_pool(self, adults, m):
         return adults
