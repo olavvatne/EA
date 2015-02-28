@@ -58,14 +58,13 @@ class ParentSigmaScalingSelection(AbstractParentSelection):
         avg = sum(fitness_list)/len(population)
         std = np.std(fitness_list)
         exp_values = list((1+((f -avg)/(2*std))) for f in fitness_list)
-        print("-----------------------------------------------------")
-        print("avg: ", avg, "std: ", std)
-        print(fitness_list)
         for i, v in enumerate(exp_values):
-            if v<0:
+            if v<=0:
+                exp_values[i] = 0.1 #If negative expected value, reset to small positive value so the individual has
+                #of getting picked 
                 print("i: ", population[i], "v: ", v, "f: ", fitness_list[i], " avg: ", avg, " std", std)
-        #print(exp_values)
-        probs = list(e/len(population) for e in exp_values)
+        s = sum(exp_values)
+        probs = list(e/s for e in exp_values)
         return self._global_weighted_select(population, probs, m)
 
 
