@@ -1,6 +1,7 @@
 from abc import ABCMeta, abstractmethod
 import math
 import numpy as np
+import random
 
 class ParentSelectionFactory:
     PROPORTIONATE = "proportionate"
@@ -76,5 +77,24 @@ class ParentBoltzmannSelection(AbstractParentSelection):
 
 class ParentTournamentSelection(AbstractParentSelection):
 
-     def select_mating_pool(self, adults, m, t=1):
-        return adults
+     def select_mating_pool(self, population, m, t=1):
+        #Groups with k adults, fitness compared
+        #1-error best fit chosen, and error a random choice
+        #Should e decrease with temperature?
+        k = 5
+        e = 0.1
+        tournaments = [population[i:i + k] for i in range(0, len(population), k)]
+        mate_pool = []
+        for i in range(int(m/2)):
+            t1 = self._conduct_tournament_selection(tournaments[(i)%len(tournaments)], e)
+            t2 = self._conduct_tournament_selection(tournaments[(i)%len(tournaments)], e)
+            mate_pool.append((t1, t2))
+        return mate_pool
+
+     def _conduct_tournament_selection(self, tournament, e):
+        n = random.random()
+        if n < e:
+            return random.choice(tournament)
+        else:
+            return max(tournament, key=lambda i: i.fitness)
+

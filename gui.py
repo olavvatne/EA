@@ -194,7 +194,7 @@ class Graph(Frame):
         self.a.plot(self.x_list, self.af_list, label="Average")
         self.b.plot(self.x_list, self.std_list, label="Std")
         self.a.legend( loc='lower right' )
-        self.b.legend( loc='top right' )
+        self.b.legend( loc='upper right' )
 
     def clear(self):
         self.x_list = []
