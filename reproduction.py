@@ -81,6 +81,7 @@ class ParentTournamentSelection(AbstractParentSelection):
         #Groups with k adults, fitness compared
         #1-error best fit chosen, and error a random choice
         #Should e decrease with temperature?
+        #TODO: Set parameter from GUI
         k = 5
         e = 0.1
         tournaments = [population[i:i + k] for i in range(0, len(population), k)]
