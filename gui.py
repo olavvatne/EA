@@ -93,7 +93,7 @@ class AppUI(Frame):
         self.cycles_value.grid(row=1, column=3, sticky=E ,padx=2, pady=4)
 
         self.progress = ttk.Progressbar(self, orient='horizontal')
-        self.progress.grid(row=7, column=0, columnspan=4, sticky="WES")
+        self.progress.grid(row=7, column=0, columnspan=5, sticky="WES")
 
         self.graph = Graph(self)
         self.graph.grid(row=2, column=1, columnspan=4, rowspan=5, sticky="WNSE")

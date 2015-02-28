@@ -1,5 +1,8 @@
 from abc import ABCMeta, abstractmethod
 import random
+import statistics
+
+import numpy as np
 
 #Tournament selection
 #Sigma scaling
@@ -50,9 +53,27 @@ class ParentFitnessProportionateSelection(AbstractParentSelection):
 
 class ParentSigmaScalingSelection(AbstractParentSelection):
 
-     def select_mating_pool(self, adults, m):
-        return adults
+    def select_mating_pool(self, population, m):
+         #TODO: probably place some duplicate code in superclass.
+         #A lot of common code. Looks like both signma and fitness propriate use roulette wheel
+         fitness_list = list(a.fitness for a in population)
+         avg = sum(fitness_list)/len(population)
+         std = statistics.pstdev(fitness_list)
+         exp_values = list((1+(f - avg)/2*std) for f in fitness_list)
+         max = sum(exp_values)
+         mate_pool = []
+         for i in range(int(m/2)):
+            a1 = self.pick_adult(exp_values, random.uniform(0, max))
+            a2 = self.pick_adult(exp_values, random.uniform(0, max))
+            mate_pool.append((population[a1], population[a2]))
+         return mate_pool
 
+    def pick_adult(self, values, pick):
+        current = 0
+        for i in range(len(values)):
+            current += values[i]
+            if current > pick:
+                return i
 
 class ParentTournamentSelection(AbstractParentSelection):
 
