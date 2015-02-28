@@ -42,7 +42,7 @@ class EA(object):
             self.geno_to_pheno_development(children)
             self.fitness_evaluator.evaluate_all(children)
             self.adult_pool = self.adult_selector.select(self.adult_pool, children, population_size)
-            mating_adults = self.parent_selector.select_mating_pool(self.adult_pool, population_size)
+            mating_adults = self.parent_selector.select_mating_pool(self.adult_pool, population_size, t=1-(c/cycles))
             children = []
             for a1, a2 in mating_adults:
                 children.extend(a1.mate(a2))

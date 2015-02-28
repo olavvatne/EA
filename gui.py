@@ -45,7 +45,7 @@ class AppUI(Frame):
         options = {
             "genotype": ["default"],
             "translator": ["default", "integer"],
-            "parent_selection": ["proportionate", "sigma", "tournament"],
+            "parent_selection": ["proportionate", "sigma", "boltzmann", "tournament"],
             "adult_selection": ["full", "over", "mixing"],
             "fitness": ["default", "leading"]
         }
