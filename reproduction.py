@@ -29,51 +29,35 @@ class AbstractParentSelection(metaclass=ABCMeta):
     def select_mating_pool(self, adults, m):
         pass
 
+    def _weighted_parent_choice(self, pop, prob):
+        return np.random.choice(pop, p=prob), np.random.choice(pop, p=prob)
+
+    def _global_weighted_select(self, population, probs,  m):
+        mate_pool = []
+        for i in range(int(m/2)):
+            mate_pool.append(self._weighted_parent_choice(population, probs))
+        return mate_pool
 
 class ParentFitnessProportionateSelection(AbstractParentSelection):
 
      def select_mating_pool(self, population, m):
-        #TODO:Should method return mating pairs or children directy.
-        #TODO: Semantically it is best to return pairs and let another method combine them
-        max = sum(adult.fitness for adult in population)
-        mate_pool = []
-        for i in range(int(m/2)):
-            a1 = self.pick_adult(population, random.uniform(0, max))
-            a2 = self.pick_adult(population, random.uniform(0, max))
-            mate_pool.append((a1, a2))
+        fitness = list(adult.fitness for adult in population)
+        total = sum(fitness)
+        probs = list(f/total for f in fitness)
 
-        return mate_pool
-
-     def pick_adult(self, population, pick):
-        current = 0
-        for adult in population:
-            current += adult.fitness
-            if current > pick:
-                return adult
+        return self._global_weighted_select(population, probs, m)
 
 class ParentSigmaScalingSelection(AbstractParentSelection):
 
     def select_mating_pool(self, population, m):
-         #TODO: probably place some duplicate code in superclass.
-         #A lot of common code. Looks like both signma and fitness propriate use roulette wheel
-         fitness_list = list(a.fitness for a in population)
-         avg = sum(fitness_list)/len(population)
-         std = statistics.pstdev(fitness_list)
-         exp_values = list((1+(f - avg)/2*std) for f in fitness_list)
-         max = sum(exp_values)
-         mate_pool = []
-         for i in range(int(m/2)):
-            a1 = self.pick_adult(exp_values, random.uniform(0, max))
-            a2 = self.pick_adult(exp_values, random.uniform(0, max))
-            mate_pool.append((population[a1], population[a2]))
-         return mate_pool
+        fitness = list(a.fitness for a in population)
+        avg = sum(fitness)/len(population)
+        std = statistics.pstdev(fitness)
+        exp_values = list((1+((f - avg)/2*std)) for f in fitness)
+        probs = list(e/len(population) for e in exp_values)
 
-    def pick_adult(self, values, pick):
-        current = 0
-        for i in range(len(values)):
-            current += values[i]
-            if current > pick:
-                return i
+        return self._global_weighted_select(population, probs, m)
+
 
 class ParentTournamentSelection(AbstractParentSelection):
 
