@@ -21,7 +21,7 @@ class AbstractParentSelection(metaclass=ABCMeta):
 
     #TODO: Let EA loop update variables here, so more modularity for subclasses
     #TODO: update parameters method
-    
+
     @abstractmethod
     def select_mating_pool(self, adults, m):
         pass
@@ -52,6 +52,7 @@ class ParentSigmaScalingSelection(AbstractParentSelection):
         fitness_list = list(a.fitness for a in population)
         avg = sum(fitness_list)/len(population)
         std = np.std(fitness_list)
+        #todo: If std is zero all prob is equal
         exp_values = list((1+((f -avg)/(2*std))) for f in fitness_list)
         for i, v in enumerate(exp_values):
             if v <= 0:

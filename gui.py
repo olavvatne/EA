@@ -110,12 +110,12 @@ class AppUI(Frame):
         self.rowconfigure(6,weight=1)
 
 
-    def update(self, c, p, cf, bf):
+    def update(self, c, p, cf, bf, std):
         self.progress.step(p)
         self.average_fitness_value.configure(text=str(cf))
         self.best_fitness_value.configure(text=str(bf))
         self.cycles_value.configure(text=str(c))
-        self.graph.add(c, bf)
+        self.graph.add(c, bf, cf)
 
 class LabelledSelect(Frame):
     def __init__(self, parent, options, label_text, *args, **kwargs):
@@ -169,9 +169,9 @@ class Graph(Frame):
         Frame.__init__(self, parent)
         self.f = Figure()
         self.a = self.f.add_subplot(111)
-        #a.plot([1,2,3,4,5,6,7,8],[5,6,1,3,8,9,3,5])
-        self.xList = []
-        self.yList = []
+        self.x_list = []
+        self.bf_list = []
+        self.af_list = []
 
         canvas = FigureCanvasTkAgg(self.f, self)
         canvas._tkcanvas.config(highlightthickness=0)
@@ -179,17 +179,21 @@ class Graph(Frame):
         canvas.get_tk_widget().pack(side=BOTTOM, fill=BOTH, expand=True)
         canvas._tkcanvas.pack(side=TOP, fill=BOTH, expand=True)
 
-    def add(self, x, y):
-        self.xList.append(x)
-        self.yList.append(y)
+    def add(self, x, bf, af):
+        self.x_list.append(x)
+        self.bf_list.append(bf)
+        self.af_list.append(af)
 
     def animate(self, i):
         self.a.clear()
-        self.a.plot(self.xList, self.yList)
+        self.a.plot(self.x_list, self.bf_list, label="Best")
+        self.a.plot(self.x_list, self.af_list, label="Average")
+        self.a.legend( loc='upper left' )
 
     def clear(self):
-        self.xList = []
-        self.yList = []
+        self.x_list = []
+        self.bf_list = []
+        self.af_list = []
 
 
 def stop_ea(*args):
@@ -228,7 +232,7 @@ root.title("EA problem solver system")
 app = AppUI(root)
 root.bind('<Return>', run_ea)
 ea_system = EA()
-ani = animation.FuncAnimation(app.graph.f, app.graph.animate, interval=500)
+ani = animation.FuncAnimation(app.graph.f, app.graph.animate, interval=1000)
 ea_system.add_listener(app)
 
 root.mainloop()

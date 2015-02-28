@@ -4,6 +4,7 @@ from evaluator import FitnessEvaluatorFactory
 from individual import Individual
 from selection import AdultSelectionFactory
 from reproduction import ParentSelectionFactory
+import numpy as np
 
 class EA(object):
     #Highly parameterized, should be able to change all parameters, through gui
@@ -58,16 +59,17 @@ class EA(object):
                 #send to indicate evolution loop progression.
                 self.send_update(c, cycles, best_fitness)
 
-        print(self.adult_pool)
-        print(self.best_fitness(self.adult_pool))
 
     def stop(self):
         self.is_stopping = True
 
     def send_update(self, c, cycles, best_fitness):
-        #Send stuff to be displayed
+        #TODO: MESSY
         avg_fitness = self.avg_fitness(self.adult_pool)
-        self.listener.update(c, 1/cycles * 100 * EA.EVENT_RATE, avg_fitness, best_fitness)
+        std = np.std(list(a.fitness for a in self.adult_pool))
+        i = max(self.adult_pool, key=lambda x: x.fitness)
+        print("C: ", c, "B_f: ", best_fitness, " A_f: ", avg_fitness, " std: ", std, "G: ", i.genotype_container)
+        self.listener.update(c, 1/cycles * 100 * EA.EVENT_RATE, avg_fitness, best_fitness, std)
 
     def best_fitness(self, adults):
         return max(adult.fitness for adult in adults)
