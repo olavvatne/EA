@@ -74,6 +74,9 @@ class AppUI(Frame):
         self.genome_length = LabelledEntry(self, "Genome length", 20)
         self.genome_length.grid(row=0, column=3, padx=4, pady=8)
 
+        self.threshold = LabelledEntry(self, "Threshold", 1)
+        self.threshold.grid(row=0, column=4, padx=4, pady=8)
+
         self.average_fitness = Label(self, text="Avg fitness: ")
         self.average_fitness.grid(row=1, column=1, sticky=W ,padx=2, pady=4)
         self.average_fitness_value = Label(self, text="0")
@@ -93,12 +96,13 @@ class AppUI(Frame):
         self.progress.grid(row=7, column=0, columnspan=4, sticky="WES")
 
         self.graph = Graph(self)
-        self.graph.grid(row=2, column=1, columnspan=3, rowspan=5, sticky="WNSE")
+        self.graph.grid(row=2, column=1, columnspan=4, rowspan=5, sticky="WNSE")
 
         self.columnconfigure(0, minsize="150")
         self.columnconfigure(1, weight=1)
         self.columnconfigure(2, weight=1)
         self.columnconfigure(3, weight=1)
+        self.columnconfigure(4, weight=1)
         self.rowconfigure(2,weight=1)
         self.rowconfigure(3,weight=1)
         self.rowconfigure(4,weight=1)
@@ -138,8 +142,25 @@ class LabelledEntry(Frame):
         self.label.pack(side="left", anchor=W, expand=True)
 
     def get(self):
-        return int(self.content.get())
+        v = self.content.get()
+        if self._is_number(v):
+            return float(v)
+        else:
+            raise RuntimeError("Not a number!")
 
+    def get_special(self):
+        v = self.content.get()
+        if not len(v)>0:
+            return float("inf")
+        else:
+            return self.get()
+
+    def _is_number(self, n):
+        try:
+            float(n)
+            return True
+        except ValueError:
+            return False
 
 class Graph(Frame):
     #TODO: Clean up code
@@ -185,9 +206,10 @@ def run_ea(*args):
     app.graph.clear()
 
     def callback():
-        pop_size = app.population_size.get()
-        gen = app.generations.get()
-        ea_system.run(pop_size, gen, 6.0)
+        pop_size = int(app.population_size.get())
+        gen = int(app.generations.get())
+        threshold = app.threshold.get_special()
+        ea_system.run(pop_size, gen, threshold)
         app.progress.stop()
     t = threading.Thread(target=callback)
     t.daemon = True
