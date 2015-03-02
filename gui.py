@@ -43,68 +43,70 @@ class AppUI(Frame):
         except AttributeError:
             self.master.tk.call(master, "config", "-menu", self.menubar)
 
-        #TODO:Temp, Make config file that will alter the program. New stuff should be registered
         options = Configuration.get()
-        print(options)
-
-        self.genotype = LabelledSelect(self, self.option_list(options["genotype"]), "Genotype")
-        self.genotype.grid(row=2, column=0, sticky=W, padx=4, pady=4)
-
-        self.translator = LabelledSelect(self, self.option_list(options["translator"]), "Translator")
-        self.translator.grid(row=3, column=0, sticky=W, padx=4, pady=4)
-
-        self.fitness = LabelledSelect(self, self.option_list(options["fitness"]), "Fitness evaluator")
-        self.fitness.grid(row=4, column=0, sticky=W, padx=4, pady=4)
-
-        self.p_selection = LabelledSelect(self, self.option_list(options["parent_selection"]), "Parent selection")
-        self.p_selection.grid(row=5, column=0, sticky=W, padx=4, pady=4)
-
-        self.a_selection = LabelledSelect(self, self.option_list(options["adult_selection"]), "Adult selection")
-        self.a_selection.grid(row=6, column=0, sticky=W, padx=4, pady=4)
-
         self.population_size = LabelledEntry(self, "Pop size", 20)
-        self.population_size.grid(row=0, column=1, padx=4, pady=8)
+        self.population_size.grid(row=1, column=0, padx=4, pady=4, sticky="WE")
 
         self.generations = LabelledEntry(self, "Cycles", 100)
-        self.generations.grid(row=0, column=2, padx=4, pady=8)
+        self.generations.grid(row=2, column=0, padx=4, pady=4, sticky="WE")
 
         self.genome_length = LabelledEntry(self, "Genome length", 20)
-        self.genome_length.grid(row=0, column=3, padx=4, pady=8)
+        self.genome_length.grid(row=3, column=0, padx=4, pady=4, sticky="WE")
 
         self.threshold = LabelledEntry(self, "Threshold", 1)
-        self.threshold.grid(row=0, column=4, padx=4, pady=8)
+        self.threshold.grid(row=4, column=0, padx=4, pady=4, sticky="WE")
+
+        self.genotype = LabelledSelect(self, self.option_list(options["genotype"]), "Genotype")
+        self.genotype.grid(row=5, column=0, padx=4, pady=4, sticky="WE")
+
+        self.translator = LabelledSelect(self, self.option_list(options["translator"]), "Translator")
+        self.translator.grid(row=6, column=0, padx=4, pady=4, sticky="WE")
+
+        self.fitness = LabelledSelect(self, self.option_list(options["fitness"]), "Fitness evaluator")
+        self.fitness.grid(row=7, column=0, padx=4, pady=4, sticky="WE")
+
+        self.p_selection = LabelledSelect(self, self.option_list(options["parent_selection"]), "Parent selection")
+        self.p_selection.grid(row=8, column=0,  padx=4, pady=4, sticky="WE")
+
+        self.a_selection = LabelledSelect(self, self.option_list(options["adult_selection"]), "Adult selection")
+        self.a_selection.grid(row=9, column=0,  padx=4, pady=4, sticky="WE")
+
+
 
         self.average_fitness = Label(self, text="Avg fitness: ")
-        self.average_fitness.grid(row=1, column=1, sticky=W ,padx=2, pady=4)
+        self.average_fitness.grid(row=0, column=1, sticky=W ,padx=2, pady=4)
         self.average_fitness_value = Label(self, text="0")
-        self.average_fitness_value.grid(row=1, column=1, sticky=E ,padx=2, pady=4)
+        self.average_fitness_value.grid(row=0, column=1, sticky=E ,padx=2, pady=4)
 
         self.best_fitness = Label(self, text="Best fitness: ")
-        self.best_fitness.grid(row=1, column=2, sticky=W ,padx=2, pady=4)
+        self.best_fitness.grid(row=0, column=2, sticky=W ,padx=2, pady=4)
         self.best_fitness_value = Label(self, text="0")
-        self.best_fitness_value.grid(row=1, column=2, sticky=E ,padx=2, pady=4)
+        self.best_fitness_value.grid(row=0, column=2, sticky=E ,padx=2, pady=4)
 
         self.cycles = Label(self, text="Cycles: ")
-        self.cycles.grid(row=1, column=3, sticky=W ,padx=2, pady=4)
+        self.cycles.grid(row=0, column=3, sticky=W ,padx=2, pady=4)
         self.cycles_value = Label(self, text="0")
-        self.cycles_value.grid(row=1, column=3, sticky=E ,padx=2, pady=4)
+        self.cycles_value.grid(row=0, column=3, sticky=E ,padx=2, pady=4)
 
         self.progress = ttk.Progressbar(self, orient='horizontal')
-        self.progress.grid(row=7, column=0, columnspan=5, sticky="WES")
+        self.progress.grid(row=10, column=0, columnspan=5, sticky="WES")
 
         self.graph = Graph(self)
-        self.graph.grid(row=2, column=1, columnspan=4, rowspan=5, sticky="WNSE")
+        self.graph.grid(row=1, column=1, columnspan=4, rowspan=9, sticky="WNSE")
 
         self.columnconfigure(0, minsize="150")
         self.columnconfigure(1, weight=1)
         self.columnconfigure(2, weight=1)
         self.columnconfigure(3, weight=1)
         self.columnconfigure(4, weight=1)
+        self.rowconfigure(1,weight=1)
         self.rowconfigure(2,weight=1)
         self.rowconfigure(3,weight=1)
         self.rowconfigure(4,weight=1)
         self.rowconfigure(5,weight=1)
         self.rowconfigure(6,weight=1)
+        self.rowconfigure(7,weight=1)
+        self.rowconfigure(8,weight=1)
 
     def option_list(self, d):
         return sorted(d, key=lambda k: d[k]["order"])
@@ -118,13 +120,13 @@ class AppUI(Frame):
 
 class LabelledSelect(Frame):
     def __init__(self, parent, options, label_text, *args, **kwargs):
-        Frame.__init__(self, parent)
+        Frame.__init__(self, parent, *args, **kwargs)
         self.label = Label(self, text=label_text)
         self.selected = StringVar(self)
         self.selected.set(options[0])
         self.option_select = OptionMenu(self, self.selected, *options)
-        self.option_select.pack(side="bottom", anchor=W)
-        self.label.pack(side="top", anchor=W, expand=True)
+        self.option_select.pack(side="right", anchor=E)
+        self.label.pack(side="left", anchor=W, expand=True)
 
     def get(self):
         return self.selected.get()
@@ -132,13 +134,13 @@ class LabelledSelect(Frame):
 
 class LabelledEntry(Frame):
     def __init__(self, parent, label_text, default_value,  *args, **kwargs):
-        Frame.__init__(self, parent)
+        Frame.__init__(self, parent, *args, **kwargs)
         self.label = Label(self, text=label_text)
         self.content = StringVar(self)
         self.content.set(str(default_value))
         self.entry = Entry(self, textvariable=self.content)
-        self.entry.pack(side="right", anchor=W)
         self.label.pack(side="left", anchor=W, expand=True)
+        self.entry.pack(side="right", anchor=E)
 
     def get(self):
         v = self.content.get()
