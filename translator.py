@@ -2,6 +2,7 @@ from abc import ABCMeta, abstractmethod
 import numpy as np
 from phenotype import IntegerPhenotype
 import sys
+import math
 from configuration import Configuration
 
 class TranslatorFactory:
@@ -48,20 +49,29 @@ class BinToIntTranslator(AbstractTranslator):
 
 class BinToSymbolTranslator(AbstractTranslator):
 
+    def __init__(self, s=4):
+        self.nr_of_symbols = s
+        self.b = math.ceil(math.log2(self.nr_of_symbols))#Gray bits to support nr of symbols
+
     def develop(self, individual):
         p = individual.genotype_container.genotype
-        #TODO set symbol size s in config
-        s = 4
-        #TODO: find better way to encode bin to symbol set
-        symbol_list = [sum(p[i:i + s]) for i in range(0, len(p), s)]
+
+        #Use gray encoding so that a bit change will not
+        #Possibly better for integers, and not symbols that has no appearant relations
+        #TODO: modulo a good idea???
+        symbol_list = [self._g2i(p[i:i + self.b])%self.nr_of_symbols for i in range(0, len(p), self.b)]
         return IntegerPhenotype(np.array(symbol_list))
 
-    def _gray2bin(self, bits):
+    def _g2i(self, l):
+        return BinToSymbolTranslator._bin2int(BinToSymbolTranslator._gray2bin(l))
+    @staticmethod
+    def _gray2bin(bits):
         b = [bits[0]]
         for nextb in bits[1:]: b.append(b[-1] ^ nextb)
         return b
 
-    def _bin2int(self, bits):
+    @staticmethod
+    def _bin2int(bits):
         'From binary bits, msb at index 0 to integer'
         i = 0
         for bit in bits:
