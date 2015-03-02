@@ -68,7 +68,7 @@ class EA(object):
         avg_fitness = self.avg_fitness(self.adult_pool)
         std = np.std(list(a.fitness for a in self.adult_pool))
         i = max(self.adult_pool, key=lambda x: x.fitness)
-        print("C: ", c, "B_f: ", best_fitness, " A_f: ", avg_fitness, " std: ", std, "G: ", i.genotype_container)
+        print("C: ", c, "B_f: ", best_fitness, " A_f: ", avg_fitness, " std: ", std, "P: ", i.phenotype_container)
         self.listener.update(c, 1/cycles * 100 * EA.EVENT_RATE, avg_fitness, best_fitness, std)
 
     def best_fitness(self, adults):
@@ -111,8 +111,3 @@ g_to_p_translator = config
 f = config
 s = "full"
 p = "proportionate"
-
-#ea.setup(g_to_p_translator, f, g, s, p, 20)
-#ea.run(20,100,1)
-#@classmethod
-#@staticmethod
