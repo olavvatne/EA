@@ -47,19 +47,19 @@ class AppUI(Frame):
         options = Configuration.get()
         print(options)
 
-        self.genotype = LabelledSelect(self, options["genotype"]["options"], "Genotype")
+        self.genotype = LabelledSelect(self, self.option_list(options["genotype"]), "Genotype")
         self.genotype.grid(row=2, column=0, sticky=W, padx=4, pady=4)
 
-        self.translator = LabelledSelect(self, options["translator"]["options"], "Translator")
+        self.translator = LabelledSelect(self, self.option_list(options["translator"]), "Translator")
         self.translator.grid(row=3, column=0, sticky=W, padx=4, pady=4)
 
-        self.fitness = LabelledSelect(self, options["fitness"]["options"], "Fitness evaluator")
+        self.fitness = LabelledSelect(self, self.option_list(options["fitness"]), "Fitness evaluator")
         self.fitness.grid(row=4, column=0, sticky=W, padx=4, pady=4)
 
-        self.p_selection = LabelledSelect(self, options["parent_selection"]["options"], "Parent selection")
+        self.p_selection = LabelledSelect(self, self.option_list(options["parent_selection"]), "Parent selection")
         self.p_selection.grid(row=5, column=0, sticky=W, padx=4, pady=4)
 
-        self.a_selection = LabelledSelect(self, options["adult_selection"]["options"], "Adult selection")
+        self.a_selection = LabelledSelect(self, self.option_list(options["adult_selection"]), "Adult selection")
         self.a_selection.grid(row=6, column=0, sticky=W, padx=4, pady=4)
 
         self.population_size = LabelledEntry(self, "Pop size", 20)
@@ -106,6 +106,8 @@ class AppUI(Frame):
         self.rowconfigure(5,weight=1)
         self.rowconfigure(6,weight=1)
 
+    def option_list(self, d):
+        return sorted(d, key=lambda k: d[k]["order"])
 
     def update(self, c, p, cf, bf, std):
         self.progress.step(p)

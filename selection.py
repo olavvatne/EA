@@ -1,17 +1,13 @@
 from abc import ABCMeta, abstractmethod
 import sys
-
+from configuration import Configuration
 class AdultSelectionFactory:
     FULL = "full"
-    OVER_PRODUCTION = "over"
-    MIXING = "mixing"
 
     @staticmethod
     def make_adult_selector(selector=FULL):
-        selections = {AdultSelectionFactory.FULL: "FullReplacementAdultSelection",
-                      AdultSelectionFactory.OVER_PRODUCTION: "OverProductionAdultSelection",
-                      AdultSelectionFactory.MIXING: "MixingAdultSelection"}
-        return  getattr(sys.modules[__name__], selections[selector])()
+        selections = Configuration.get()["adult_selection"]
+        return  getattr(sys.modules[__name__], selections[selector]["class_name"])()
 
 
 class AbstractAdultSelection(metaclass=ABCMeta):

@@ -1,17 +1,72 @@
 {
     "genotype": {
-        "options": ["default"]
+        "default": {
+            "name": "Bit Vector",
+            "order": 1,
+            "class_name": "BitVectorGenotype"
+        }
     },
     "translator": {
-        "options": ["default", "integer"]
+        "default": {
+            "name": "Bit to bit",
+            "order": 1,
+            "class_name": "DefaultTranslator"
+        },
+        "integer": {
+            "name": "Bit to int",
+            "order": 2,
+            "class_name": "BinToIntTranslator"
+        }
     },
     "parent_selection": {
-        "options": ["proportionate", "sigma", "boltzmann", "tournament"]
+        "proportionate": {
+            "name": "Proportionate scaling",
+            "order": 1,
+            "class_name": "ParentFitnessProportionateSelection"
+        },
+        "sigma": {
+            "name": "Sigma scaling",
+            "order": 2,
+            "class_name": "ParentSigmaScalingSelection"
+        },
+        "boltzmann": {
+            "name": "Boltzmann scaling",
+            "order": 3,
+            "class_name": "ParentBoltzmannSelection"
+        },
+        "tournament": {
+            "name": "Local tournament",
+            "order": 4,
+            "class_name": "ParentTournamentSelection"
+        }
     },
     "adult_selection": {
-        "options": ["full", "over", "mixing"]
+        "full": {
+            "name": "Full replacement",
+            "order": 1,
+            "class_name": "FullReplacementAdultSelection"
+        },
+        "over": {
+            "name": "Over production",
+            "order": 2,
+            "class_name": "OverProductionAdultSelection"
+        },
+        "mixing": {
+            "name": "Generational mixing",
+            "order": 3,
+            "class_name": "MixingAdultSelection"
+        }
     },
     "fitness": {
-        "options": ["default", "leading"]
+        "default": {
+            "name": "Fraction",
+            "order": 1,
+            "class_name": "DefaultFitnessEvaluator"
+        },
+        "leading": {
+            "name": "Leading",
+            "order": 2,
+            "class_name": "LeadingFitnessEvaluator"
+        }
     }
 }

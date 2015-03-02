@@ -2,16 +2,15 @@ from abc import ABCMeta, abstractmethod
 import numpy as np
 from phenotype import IntegerPhenotype
 import sys
+from configuration import Configuration
 
 class TranslatorFactory:
     DEFAULT = "default"
-    INTEGER = "integer"
 
     @staticmethod
     def make_fitness_translator(translator=DEFAULT):
-        translators = {TranslatorFactory.DEFAULT: "DefaultTranslator",
-                       TranslatorFactory.INTEGER: "BinToIntTranslator"}
-        return getattr(sys.modules[__name__], translators[translator])()
+        translators = Configuration.get()["translator"]
+        return getattr(sys.modules[__name__], translators[translator]["class_name"])()
 
 
 class AbstractTranslator(metaclass=ABCMeta):

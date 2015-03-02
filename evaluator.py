@@ -1,16 +1,15 @@
 from abc import ABCMeta, abstractmethod
 import numpy as np
 import sys
+from configuration import Configuration
 
 class FitnessEvaluatorFactory:
     DEFAULT = "default"
-    LEADING = "leading"
 
     @staticmethod
     def make_fitness_evaluator(evaluator=DEFAULT):
-        evaluators = {FitnessEvaluatorFactory.DEFAULT: "DefaultFitnessEvaluator",
-                      FitnessEvaluatorFactory.LEADING: "LeadingFitnessEvaluator"}
-        return getattr(sys.modules[__name__], evaluators[evaluator])()
+        evaluators = Configuration.get()["fitness"]
+        return getattr(sys.modules[__name__], evaluators[evaluator]["class_name"])()
 
 
 class AbstractFitnessEvaluator(metaclass=ABCMeta):

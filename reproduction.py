@@ -3,20 +3,15 @@ import math
 import numpy as np
 import random
 import sys
+from configuration import Configuration
 
 class ParentSelectionFactory:
     PROPORTIONATE = "proportionate"
-    SIGMA = "sigma"
-    BOLTZMANN = "boltzmann"
-    TOURNAMENT = "tournament"
 
     @staticmethod
     def make_parent_selector(selector=PROPORTIONATE):
-        selectors = {ParentSelectionFactory.PROPORTIONATE: "ParentFitnessProportionateSelection",
-                     ParentSelectionFactory.SIGMA: "ParentSigmaScalingSelection",
-                     ParentSelectionFactory.TOURNAMENT: "ParentTournamentSelection",
-                     ParentSelectionFactory.BOLTZMANN: "ParentBoltzmannSelection"}
-        return getattr(sys.modules[__name__], selectors[selector])()
+        selectors = Configuration.get()["parent_selection"]
+        return getattr(sys.modules[__name__], selectors[selector]["class_name"])()
 
 
 class AbstractParentSelection(metaclass=ABCMeta):
