@@ -17,6 +17,11 @@
             "order": 2,
             "class_name": "BinToIntTranslator"
         }
+        "symbol": {
+            "name": "Bit to symbol set",
+            "order": 3,
+            "class_name": "BinToSymbolTranslator"
+        }
     },
     "parent_selection": {
         "proportionate": {
