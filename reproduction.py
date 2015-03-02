@@ -55,6 +55,7 @@ class ParentSigmaScalingSelection(AbstractParentSelection):
         std = np.std(fitness_list)
         #todo: If std is zero all prob is equal
         exp_values = list((1+((f -avg)/(2*std))) for f in fitness_list)
+
         for i, v in enumerate(exp_values):
             if v <= 0:
                 exp_values[i] = 0.1 #If negative expected value, reset to small positive value so the individual has

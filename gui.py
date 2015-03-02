@@ -227,6 +227,7 @@ def run_ea(*args):
     t.start()
 
 
+
 def onExit(*args):
         print("TEST_EXIT")
         root.quit()
