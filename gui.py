@@ -8,7 +8,7 @@ from matplotlib.figure import Figure
 import matplotlib.animation as animation
 from matplotlib import style
 style.use('ggplot')
-import sys
+import cProfile
 
 from ea import EA
 
@@ -43,33 +43,31 @@ class AppUI(Frame):
         except AttributeError:
             self.master.tk.call(master, "config", "-menu", self.menubar)
 
+        gui_control_elements = [
+            {"name": "population_size", "label": "Pop size", "value": 20},
+            {"name": "generations","label": "Cycles", "value": 100},
+            {"name": "genome_length", "label": "Genome length", "value": 20},
+            {"name": "threshold", "label": "Threshold","value": 1},
+            {"name": "genotype", "label": "Genotype","value": None},
+            {"name": "translator", "label": "Translator","value": None},
+            {"name": "fitness", "label": "Fitness","value": None},
+            {"name": "parent_selection", "label": "Parent selection","value": None},
+            {"name": "adult_selection", "label": "Adult selection","value": None},
+            ]
+        self.elements = {}
+        for i in range(4):
+            e = gui_control_elements[i]
+            self.elements[e["name"]] = LabelledEntry(self, e["label"], e["value"])
+            self.elements[e["name"]].grid(row=i+1, column=0, padx=4, pady=4, sticky="WE")
+            self.rowconfigure(i+1,weight=1)
+
         options = Configuration.get()
-        self.population_size = LabelledEntry(self, "Pop size", 20)
-        self.population_size.grid(row=1, column=0, padx=4, pady=4, sticky="WE")
+        for i in range(4,len(gui_control_elements)):
+            e = gui_control_elements[i]
+            self.elements[e["name"]] = LabelledSelect(self, self.option_list(options[e["name"]]), e["label"])
+            self.elements[e["name"]].grid(row=i+1, column=0, padx=4, pady=4, sticky="WE")
+            self.rowconfigure(i+1,weight=1)
 
-        self.generations = LabelledEntry(self, "Cycles", 100)
-        self.generations.grid(row=2, column=0, padx=4, pady=4, sticky="WE")
-
-        self.genome_length = LabelledEntry(self, "Genome length", 20)
-        self.genome_length.grid(row=3, column=0, padx=4, pady=4, sticky="WE")
-
-        self.threshold = LabelledEntry(self, "Threshold", 1)
-        self.threshold.grid(row=4, column=0, padx=4, pady=4, sticky="WE")
-
-        self.genotype = LabelledSelect(self, self.option_list(options["genotype"]), "Genotype")
-        self.genotype.grid(row=5, column=0, padx=4, pady=4, sticky="WE")
-
-        self.translator = LabelledSelect(self, self.option_list(options["translator"]), "Translator")
-        self.translator.grid(row=6, column=0, padx=4, pady=4, sticky="WE")
-
-        self.fitness = LabelledSelect(self, self.option_list(options["fitness"]), "Fitness evaluator")
-        self.fitness.grid(row=7, column=0, padx=4, pady=4, sticky="WE")
-
-        self.p_selection = LabelledSelect(self, self.option_list(options["parent_selection"]), "Parent selection")
-        self.p_selection.grid(row=8, column=0,  padx=4, pady=4, sticky="WE")
-
-        self.a_selection = LabelledSelect(self, self.option_list(options["adult_selection"]), "Adult selection")
-        self.a_selection.grid(row=9, column=0,  padx=4, pady=4, sticky="WE")
 
 
 
@@ -99,10 +97,6 @@ class AppUI(Frame):
         self.columnconfigure(2, weight=1)
         self.columnconfigure(3, weight=1)
         self.columnconfigure(4, weight=1)
-        self.rowconfigure(1,weight=1)
-        self.rowconfigure(2,weight=1)
-        self.rowconfigure(3,weight=1)
-        self.rowconfigure(4,weight=1)
         self.rowconfigure(5,weight=1)
         self.rowconfigure(6,weight=1)
         self.rowconfigure(7,weight=1)
@@ -209,18 +203,18 @@ def stop_ea(*args):
 
 
 def run_ea(*args):
-    ea_system.setup(app.translator.get(),
-                 app.fitness.get(),
-                 app.genotype.get(),
-                 app.a_selection.get(),
-                 app.p_selection.get(),
-                 app.genome_length.get())
+    ea_system.setup(app.elements["translator"].get(),
+                 app.elements["fitness"].get(),
+                 app.elements["genotype"].get(),
+                 app.elements["adult_selection"].get(),
+                 app.elements["parent_selection"].get(),
+                 app.elements["genome_length"].get())
     app.graph.clear()
 
     def callback():
-        pop_size = int(app.population_size.get())
-        gen = int(app.generations.get())
-        threshold = app.threshold.get_special()
+        pop_size = int(app.elements["population_size"].get())
+        gen = int(app.elements["generations"].get())
+        threshold = app.elements["threshold"].get_special()
         ea_system.run(pop_size, gen, threshold)
         app.progress.stop()
     t = threading.Thread(target=callback)
