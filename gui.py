@@ -208,14 +208,15 @@ def stop_ea(*args):
 
 def run_ea(*args):
     #TODO: MAke general, testing purposes
-    fitness_parameters = Configuration.get()["fitness"][app.fitness.get()]["parameters"]
+    configurations = Configuration.get()
+    print(configurations)
     ea_system.setup(app.translator.get(),
                  app.fitness.get(),
                  app.genotype.get(),
                  app.a_selection.get(),
                  app.p_selection.get(),
                  app.genome_length.get(),
-                 **fitness_parameters)
+                 **configurations)
     app.graph.clear()
 
     def callback():

@@ -66,12 +66,14 @@ class LeadingFitnessEvaluator(AbstractFitnessEvaluator):
 class SurprisingFitnessEvaluator(AbstractFitnessEvaluator):
     #For LOLZ prefix problem
 
-    def __init__(self, s=4):
+    def __init__(self, s=4, locally=False):
+        #Checkbox or something to indicate global or local
         self.s = s
         print(self.s)
 
     def evaluate(self, individual):
         p = individual.phenotype_container.phenotype
+        total = (len(p)-1)*(len(p))/2
         #Integer phenotype,
         #Penality for nr of not surprising errors
 

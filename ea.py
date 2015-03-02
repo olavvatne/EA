@@ -92,14 +92,14 @@ class EA(object):
         for individual in population:
             individual.devlop()
 
-    def setup(self, translator, fitness_evaluator, genotype, adult_selector, parent_selector, genome_length, **kwargs):
-
-        self.translator = TranslatorFactory.make_fitness_translator(translator)
-        self.fitness_evaluator = FitnessEvaluatorFactory.make_fitness_evaluator(fitness_evaluator, **kwargs)
-        self.genotype = genotype
+    def setup(self, geno_to_pheno, evaluator, geno, adult, parent, genome_length, **kwargs):
+        #TODO:setup should probably just get relevant config parameters
+        self.translator = TranslatorFactory.make_fitness_translator(geno_to_pheno, **kwargs["translator"][geno_to_pheno]["parameters"])
+        self.fitness_evaluator = FitnessEvaluatorFactory.make_fitness_evaluator(evaluator, **kwargs["fitness"][evaluator]["parameters"])
+        self.genotype = geno
         self.genome_length = genome_length
-        self.adult_selector = AdultSelectionFactory.make_adult_selector(adult_selector)
-        self.parent_selector = ParentSelectionFactory.make_parent_selector(parent_selector)
+        self.adult_selector = AdultSelectionFactory.make_adult_selector(adult)
+        self.parent_selector = ParentSelectionFactory.make_parent_selector(parent)
 
     def is_legal(self):
         return self.translator and self.fitness_evaluator and self.adult_selector and self.parent_selector

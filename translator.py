@@ -64,6 +64,7 @@ class BinToSymbolTranslator(AbstractTranslator):
 
     def _g2i(self, l):
         return BinToSymbolTranslator._bin2int(BinToSymbolTranslator._gray2bin(l))
+
     @staticmethod
     def _gray2bin(bits):
         b = [bits[0]]
