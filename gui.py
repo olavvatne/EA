@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk, filedialog, messagebox
+from configuration import Configuration
 import matplotlib
 matplotlib.use("TkAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
@@ -7,6 +8,7 @@ from matplotlib.figure import Figure
 import matplotlib.animation as animation
 from matplotlib import style
 style.use('ggplot')
+import sys
 
 from ea import EA
 
@@ -42,27 +44,22 @@ class AppUI(Frame):
             self.master.tk.call(master, "config", "-menu", self.menubar)
 
         #TODO:Temp, Make config file that will alter the program. New stuff should be registered
-        options = {
-            "genotype": ["default"],
-            "translator": ["default", "integer"],
-            "parent_selection": ["proportionate", "sigma", "boltzmann", "tournament"],
-            "adult_selection": ["full", "over", "mixing"],
-            "fitness": ["default", "leading"]
-        }
+        options = Configuration.get()
+        print(options)
 
-        self.genotype = LabelledSelect(self, options["genotype"], "Genotype")
+        self.genotype = LabelledSelect(self, options["genotype"]["options"], "Genotype")
         self.genotype.grid(row=2, column=0, sticky=W, padx=4, pady=4)
 
-        self.translator = LabelledSelect(self, options["translator"], "Translator")
+        self.translator = LabelledSelect(self, options["translator"]["options"], "Translator")
         self.translator.grid(row=3, column=0, sticky=W, padx=4, pady=4)
 
-        self.fitness = LabelledSelect(self, options["fitness"], "Fitness evaluator")
+        self.fitness = LabelledSelect(self, options["fitness"]["options"], "Fitness evaluator")
         self.fitness.grid(row=4, column=0, sticky=W, padx=4, pady=4)
 
-        self.p_selection = LabelledSelect(self, options["parent_selection"], "Parent selection")
+        self.p_selection = LabelledSelect(self, options["parent_selection"]["options"], "Parent selection")
         self.p_selection.grid(row=5, column=0, sticky=W, padx=4, pady=4)
 
-        self.a_selection = LabelledSelect(self, options["adult_selection"], "Adult selection")
+        self.a_selection = LabelledSelect(self, options["adult_selection"]["options"], "Adult selection")
         self.a_selection.grid(row=6, column=0, sticky=W, padx=4, pady=4)
 
         self.population_size = LabelledEntry(self, "Pop size", 20)
@@ -233,6 +230,7 @@ def onExit(*args):
         root.quit()
 
 
+Configuration.init()
 root = Tk()
 root.columnconfigure(0, weight=1)
 root.rowconfigure(0, weight=1)
@@ -242,5 +240,4 @@ root.bind('<Return>', run_ea)
 ea_system = EA()
 ani = animation.FuncAnimation(app.graph.f, app.graph.animate, interval=1000)
 ea_system.add_listener(app)
-
 root.mainloop()

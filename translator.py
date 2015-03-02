@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 import numpy as np
 from phenotype import IntegerPhenotype
-
+import sys
 
 class TranslatorFactory:
     DEFAULT = "default"
@@ -9,9 +9,9 @@ class TranslatorFactory:
 
     @staticmethod
     def make_fitness_translator(translator=DEFAULT):
-        translators = {TranslatorFactory.DEFAULT: DefaultTranslator,
-                       TranslatorFactory.INTEGER: BinToIntTranslator}
-        return translators[translator]()
+        translators = {TranslatorFactory.DEFAULT: "DefaultTranslator",
+                       TranslatorFactory.INTEGER: "BinToIntTranslator"}
+        return getattr(sys.modules[__name__], translators[translator])()
 
 
 class AbstractTranslator(metaclass=ABCMeta):
@@ -36,7 +36,6 @@ class BinToIntTranslator(AbstractTranslator):
         #TODO: More efficient way?
         k = 8
         integer_list = [self._tobin(p[i:i + k]) for i in range(0, len(p), k)]
-        print(integer_list)
         return IntegerPhenotype(np.array(integer_list))
 
 

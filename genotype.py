@@ -1,14 +1,14 @@
 from abc import ABCMeta, abstractmethod
 import numpy as np
-
+import sys
 
 class GenotypeFactory:
     DEFAULT = "default"
 
     @staticmethod
     def make_fitness_genotype(genotype=DEFAULT):
-        genotypes = {GenotypeFactory.DEFAULT:BitVectorGenotype}
-        return genotypes[genotype]()
+        genotypes = {GenotypeFactory.DEFAULT: "BitVectorGenotype"}
+        return getattr(sys.modules[__name__], genotypes[genotype])()
 
 
 class AbstractGenotype(metaclass=ABCMeta):

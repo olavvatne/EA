@@ -2,6 +2,7 @@ from abc import ABCMeta, abstractmethod
 import math
 import numpy as np
 import random
+import sys
 
 class ParentSelectionFactory:
     PROPORTIONATE = "proportionate"
@@ -11,11 +12,11 @@ class ParentSelectionFactory:
 
     @staticmethod
     def make_parent_selector(selector=PROPORTIONATE):
-        selectors = {ParentSelectionFactory.PROPORTIONATE: ParentFitnessProportionateSelection,
-                     ParentSelectionFactory.SIGMA: ParentSigmaScalingSelection,
-                     ParentSelectionFactory.TOURNAMENT: ParentTournamentSelection,
-                     ParentSelectionFactory.BOLTZMANN: ParentBoltzmannSelection}
-        return selectors[selector]()
+        selectors = {ParentSelectionFactory.PROPORTIONATE: "ParentFitnessProportionateSelection",
+                     ParentSelectionFactory.SIGMA: "ParentSigmaScalingSelection",
+                     ParentSelectionFactory.TOURNAMENT: "ParentTournamentSelection",
+                     ParentSelectionFactory.BOLTZMANN: "ParentBoltzmannSelection"}
+        return getattr(sys.modules[__name__], selectors[selector])()
 
 
 class AbstractParentSelection(metaclass=ABCMeta):

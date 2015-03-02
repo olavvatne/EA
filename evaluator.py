@@ -1,5 +1,6 @@
 from abc import ABCMeta, abstractmethod
 import numpy as np
+import sys
 
 class FitnessEvaluatorFactory:
     DEFAULT = "default"
@@ -7,9 +8,9 @@ class FitnessEvaluatorFactory:
 
     @staticmethod
     def make_fitness_evaluator(evaluator=DEFAULT):
-        evaluators = {FitnessEvaluatorFactory.DEFAULT:DefaultFitnessEvaluator,
-                      FitnessEvaluatorFactory.LEADING:LeadingFitnessEvaluator}
-        return evaluators[evaluator]()
+        evaluators = {FitnessEvaluatorFactory.DEFAULT: "DefaultFitnessEvaluator",
+                      FitnessEvaluatorFactory.LEADING: "LeadingFitnessEvaluator"}
+        return getattr(sys.modules[__name__], evaluators[evaluator])()
 
 
 class AbstractFitnessEvaluator(metaclass=ABCMeta):

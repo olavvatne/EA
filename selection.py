@@ -1,5 +1,5 @@
 from abc import ABCMeta, abstractmethod
-
+import sys
 
 class AdultSelectionFactory:
     FULL = "full"
@@ -8,10 +8,10 @@ class AdultSelectionFactory:
 
     @staticmethod
     def make_adult_selector(selector=FULL):
-        selections = {AdultSelectionFactory.FULL: FullReplacementAdultSelection,
-                      AdultSelectionFactory.OVER_PRODUCTION: OverProductionAdultSelection,
-                      AdultSelectionFactory.MIXING: MixingAdultSelection}
-        return selections[selector]()
+        selections = {AdultSelectionFactory.FULL: "FullReplacementAdultSelection",
+                      AdultSelectionFactory.OVER_PRODUCTION: "OverProductionAdultSelection",
+                      AdultSelectionFactory.MIXING: "MixingAdultSelection"}
+        return  getattr(sys.modules[__name__], selections[selector])()
 
 
 class AbstractAdultSelection(metaclass=ABCMeta):

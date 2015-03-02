@@ -1,0 +1,17 @@
+{
+    "genotype": {
+        "options": ["default"]
+    },
+    "translator": {
+        "options": ["default", "integer"]
+    },
+    "parent_selection": {
+        "options": ["proportionate", "sigma", "boltzmann", "tournament"]
+    },
+    "adult_selection": {
+        "options": ["full", "over", "mixing"]
+    },
+    "fitness": {
+        "options": ["default", "leading"]
+    }
+}
