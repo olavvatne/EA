@@ -9,9 +9,10 @@ class TranslatorFactory:
     DEFAULT = "default"
 
     @staticmethod
-    def make_fitness_translator(translator=DEFAULT, **kwargs):
-        translators = Configuration.get()["translator"]
-        return getattr(sys.modules[__name__], translators[translator]["class_name"])(**kwargs)
+    def make_fitness_translator(translator=DEFAULT):
+        selected = Configuration.get()["translator"][translator]
+        config = selected["parameters"]
+        return getattr(sys.modules[__name__], selected["class_name"])(**config)
 
 
 class AbstractTranslator(metaclass=ABCMeta):

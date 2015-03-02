@@ -7,9 +7,10 @@ class FitnessEvaluatorFactory:
     DEFAULT = "default"
 
     @staticmethod
-    def make_fitness_evaluator(evaluator=DEFAULT, **kwargs):
-        evaluators = Configuration.get()["fitness"]
-        return getattr(sys.modules[__name__], evaluators[evaluator]["class_name"])(**kwargs)
+    def make_fitness_evaluator(evaluator=DEFAULT):
+        selected = Configuration.get()["fitness"][evaluator]
+        config = selected["parameters"]
+        return getattr(sys.modules[__name__], selected["class_name"])(**config)
 
 
 class AbstractFitnessEvaluator(metaclass=ABCMeta):

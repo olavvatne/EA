@@ -58,7 +58,7 @@ class EA(object):
                 #Sends an update every 10th cycle. Fraction multiplied by 100 and 10 (10th cyle)
                 #send to indicate evolution loop progression.
                 self.send_update(c, cycles, best_fitness)
-
+        print("-------------------------")
 
     def stop(self):
         self.is_stopping = True
@@ -92,10 +92,9 @@ class EA(object):
         for individual in population:
             individual.devlop()
 
-    def setup(self, geno_to_pheno, evaluator, geno, adult, parent, genome_length, **kwargs):
-        #TODO:setup should probably just get relevant config parameters
-        self.translator = TranslatorFactory.make_fitness_translator(geno_to_pheno, **kwargs["translator"][geno_to_pheno]["parameters"])
-        self.fitness_evaluator = FitnessEvaluatorFactory.make_fitness_evaluator(evaluator, **kwargs["fitness"][evaluator]["parameters"])
+    def setup(self, geno_to_pheno, evaluator, geno, adult, parent, genome_length):
+        self.translator = TranslatorFactory.make_fitness_translator(geno_to_pheno)
+        self.fitness_evaluator = FitnessEvaluatorFactory.make_fitness_evaluator(evaluator)
         self.genotype = geno
         self.genome_length = genome_length
         self.adult_selector = AdultSelectionFactory.make_adult_selector(adult)
