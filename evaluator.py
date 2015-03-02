@@ -7,12 +7,15 @@ class FitnessEvaluatorFactory:
     DEFAULT = "default"
 
     @staticmethod
-    def make_fitness_evaluator(evaluator=DEFAULT):
+    def make_fitness_evaluator(evaluator=DEFAULT, **kwargs):
         evaluators = Configuration.get()["fitness"]
-        return getattr(sys.modules[__name__], evaluators[evaluator]["class_name"])()
+        return getattr(sys.modules[__name__], evaluators[evaluator]["class_name"])(**kwargs)
 
 
 class AbstractFitnessEvaluator(metaclass=ABCMeta):
+
+    def __init__(self, **kwargs):
+        pass
 
     @abstractmethod
     def evaluate(self, individual):
@@ -29,6 +32,9 @@ class DefaultFitnessEvaluator(AbstractFitnessEvaluator):
     #For the simple problem. Put this here so the EA works without extension classes
     NUMBER_ONE = 1
 
+    def __init__(self, **kwargs):
+        pass
+
     def evaluate(self, individual):
         p = individual.phenotype_container.phenotype
         return (np.sum(p) / p.size)
@@ -36,9 +42,13 @@ class DefaultFitnessEvaluator(AbstractFitnessEvaluator):
 class LeadingFitnessEvaluator(AbstractFitnessEvaluator):
     #For LOLZ prefix problem
 
+    def __init__(self, **kwargs):
+        if "z" in kwargs:
+            self.z = kwargs["z"]
+        else:
+            self.z = 4
 
     def evaluate(self, individual):
-        z = 4 #TODO: gui set this parameter. must be kwargs or something
         p = individual.phenotype_container.phenotype
         leading = p[0]
         score = 0
@@ -50,6 +60,6 @@ class LeadingFitnessEvaluator(AbstractFitnessEvaluator):
         if leading == 1:
             return score
         else:
-            if score > z:
-                return z
+            if score > self.z:
+                return self.z
             return score

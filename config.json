@@ -61,12 +61,18 @@
         "default": {
             "name": "Fraction",
             "order": 1,
-            "class_name": "DefaultFitnessEvaluator"
+            "class_name": "DefaultFitnessEvaluator",
+            "parameters": {
+                "test": "1"
+            }
         },
         "leading": {
             "name": "Leading",
             "order": 2,
-            "class_name": "LeadingFitnessEvaluator"
+            "class_name": "LeadingFitnessEvaluator",
+            "parameters": {
+                "z": 21
+            }
         }
     }
 }
