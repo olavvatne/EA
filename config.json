@@ -73,6 +73,14 @@
             "parameters": {
                 "z": 21
             }
+        },
+        "surprising": {
+            "name": "Surprising sequences",
+            "order": 3,
+            "class_name": "SurprisingFitnessEvaluator",
+            "parameters": {
+                "s": 2
+            }
         }
     }
 }

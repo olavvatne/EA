@@ -39,14 +39,12 @@ class DefaultFitnessEvaluator(AbstractFitnessEvaluator):
         p = individual.phenotype_container.phenotype
         return (np.sum(p) / p.size)
 
+
 class LeadingFitnessEvaluator(AbstractFitnessEvaluator):
     #For LOLZ prefix problem
 
-    def __init__(self, **kwargs):
-        if "z" in kwargs:
-            self.z = kwargs["z"]
-        else:
-            self.z = 4
+    def __init__(self, z=4):
+        self.z = z
 
     def evaluate(self, individual):
         p = individual.phenotype_container.phenotype
@@ -63,3 +61,19 @@ class LeadingFitnessEvaluator(AbstractFitnessEvaluator):
             if score > self.z:
                 return self.z
             return score
+
+
+class SurprisingFitnessEvaluator(AbstractFitnessEvaluator):
+    #For LOLZ prefix problem
+
+    def __init__(self, s=4):
+        self.s = s
+        print(self.s)
+
+    def evaluate(self, individual):
+        p = individual.phenotype_container.phenotype
+        #Integer phenotype,
+        #Penality for nr of not surprising errors
+
+        score = 0
+        return score
