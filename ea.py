@@ -37,7 +37,7 @@ class EA(object):
 
         children = self.create_population(population_size)  #Inital population
         self.adult_pool = []
-        
+
         for c in range(cycles):
 
             self.geno_to_pheno_development(children)
@@ -49,34 +49,33 @@ class EA(object):
                 children.extend(a1.mate(a2))
 
             #Check stopping condition, and gui update below
-            best_fitness = self.best_fitness(self.adult_pool)
-            if self.is_stopping or fitness_threshold <= best_fitness:
+            best_individual = self.best_individual(self.adult_pool)
+            if self.is_stopping or fitness_threshold <= best_individual.fitness:
                 self.is_stopping = False
                 break
 
             if self.listener and c%EA.EVENT_RATE == 0:
                 #Sends an update every 10th cycle. Fraction multiplied by 100 and 10 (10th cyle)
                 #send to indicate evolution loop progression.
-                self.send_update(c, cycles, best_fitness)
+                self.send_update(c, cycles, best_individual)
 
         #Final update
-        best_fitness = self.best_fitness(self.adult_pool)
-        self.send_update(c+1, cycles, best_fitness)
+        best_individual = self.best_individual(self.adult_pool)
+        self.send_update(c+1, cycles, best_individual)
         print("-------------------------")
 
     def stop(self):
         self.is_stopping = True
 
-    def send_update(self, c, cycles, best_fitness):
+    def send_update(self, c, cycles, best):
         #TODO: MESSY
         avg_fitness = self.avg_fitness(self.adult_pool)
         std = np.std(list(a.fitness for a in self.adult_pool))
-        i = max(self.adult_pool, key=lambda x: x.fitness)
-        print("C: ", c, "B_f: ", best_fitness, " A_f: ", avg_fitness, " std: ", std, "P: ", i.phenotype_container)
-        self.listener.update(c, 1/cycles * 100 * EA.EVENT_RATE, avg_fitness, best_fitness, std)
+        print("C: ", c, "B_f: ", best.fitness, " A_f: ", avg_fitness, " std: ", std, "P: ", i.phenotype_container)
+        self.listener.update(c, 1/cycles * 100 * EA.EVENT_RATE, avg_fitness, best.fitness, std)
 
-    def best_fitness(self, adults):
-        return max(adult.fitness for adult in adults)
+    def best_individual(self, adults):
+        return max(adults, key=lambda a: a.fitness)
 
     def avg_fitness(self, population):
         tot_fitness = sum(individual.fitness for individual in population)
