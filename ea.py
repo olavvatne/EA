@@ -44,9 +44,7 @@ class EA(object):
             self.fitness_evaluator.evaluate_all(children)
             self.adult_pool = self.adult_selector.select(self.adult_pool, children, population_size)
             mating_adults = self.parent_selector.select_mating_pool(self.adult_pool, population_size, t=1-(c/cycles))
-            children = []
-            for a1, a2 in mating_adults:
-                children.extend(a1.mate(a2))
+            children = self.reproduce(mating_adults)
 
             #Check stopping condition, and gui update below
             best_individual = self.best_individual(self.adult_pool)
@@ -71,7 +69,7 @@ class EA(object):
         #TODO: MESSY
         avg_fitness = self.avg_fitness(self.adult_pool)
         std = np.std(list(a.fitness for a in self.adult_pool))
-        print("C: ", c, "B_f: ", best.fitness, " A_f: ", avg_fitness, " std: ", std, "P: ", i.phenotype_container)
+        print("C: ", c, "B_f: ", best.fitness, " A_f: ", avg_fitness, " std: ", std, "P: ", best.phenotype_container)
         self.listener.update(c, 1/cycles * 100 * EA.EVENT_RATE, avg_fitness, best.fitness, std)
 
     def best_individual(self, adults):
@@ -82,7 +80,6 @@ class EA(object):
         return tot_fitness/len(population)
 
     def create_population(self, n):
-        #TODO: consider using heap or more appropriate data structure. Currently use list to avoid clutter.
         population = []
         for i in range(n):
             genotype = GenotypeFactory.make_fitness_genotype(self.genotype)
@@ -95,6 +92,12 @@ class EA(object):
         for individual in population:
             individual.devlop()
 
+    def reproduce(self, mating_adults):
+        children = []
+        for a1, a2 in mating_adults:
+            children.extend(a1.mate(a2))
+        return children
+
     def setup(self, geno_to_pheno, evaluator, geno, adult, parent, genome_length):
         self.translator = TranslatorFactory.make_fitness_translator(geno_to_pheno)
         self.fitness_evaluator = FitnessEvaluatorFactory.make_fitness_evaluator(evaluator)
@@ -106,10 +109,3 @@ class EA(object):
     def is_legal(self):
         return self.translator and self.fitness_evaluator and self.adult_selector and self.parent_selector
 
-ea = EA()
-config = "default"
-g = config
-g_to_p_translator = config
-f = config
-s = "full"
-p = "proportionate"
