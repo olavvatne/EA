@@ -64,6 +64,5 @@ class BitVectorGenotype(AbstractGenotype):
         crossover = math.floor(random.uniform(0, self.genotype.size))
         cg1 = self.copy()
         if random.random() < self.crossover_rate:
-            #TODO: Should : be reversed randomly
             cg1.genotype[:crossover] = partner.genotype[:crossover]
         return cg1
