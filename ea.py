@@ -30,7 +30,7 @@ class EA(object):
         self.listener = listener
 
     def run(self, population_size, cycles, fitness_threshold):
-        #TODO: Make fitness threshold optional, and settable in GUI
+        print("-------------------------")
 
         if not self.is_legal():
             raise RuntimeError("Cannot run EA. Lack neccessary objects")

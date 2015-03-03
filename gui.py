@@ -54,6 +54,7 @@ class AppUI(Frame):
             {"name": "parent_selection", "label": "Parent selection","value": None},
             {"name": "adult_selection", "label": "Adult selection","value": None},
             ]
+
         self.elements = {}
         for i in range(4):
             e = gui_control_elements[i]
@@ -97,10 +98,6 @@ class AppUI(Frame):
         self.columnconfigure(2, weight=1)
         self.columnconfigure(3, weight=1)
         self.columnconfigure(4, weight=1)
-        self.rowconfigure(5,weight=1)
-        self.rowconfigure(6,weight=1)
-        self.rowconfigure(7,weight=1)
-        self.rowconfigure(8,weight=1)
 
     def option_list(self, d):
         return sorted(d, key=lambda k: d[k]["order"])
