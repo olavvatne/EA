@@ -37,7 +37,7 @@ class EA(object):
 
         children = self.create_population(population_size)  #Inital population
         self.adult_pool = []
-
+        
         for c in range(cycles):
 
             self.geno_to_pheno_development(children)
@@ -48,16 +48,20 @@ class EA(object):
             for a1, a2 in mating_adults:
                 children.extend(a1.mate(a2))
 
+            #Check stopping condition, and gui update below
             best_fitness = self.best_fitness(self.adult_pool)
             if self.is_stopping or fitness_threshold <= best_fitness:
                 self.is_stopping = False
-                self.send_update(c, cycles, best_fitness)
                 break
 
             if self.listener and c%EA.EVENT_RATE == 0:
                 #Sends an update every 10th cycle. Fraction multiplied by 100 and 10 (10th cyle)
                 #send to indicate evolution loop progression.
                 self.send_update(c, cycles, best_fitness)
+
+        #Final update
+        best_fitness = self.best_fitness(self.adult_pool)
+        self.send_update(c+1, cycles, best_fitness)
         print("-------------------------")
 
     def stop(self):
