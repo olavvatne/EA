@@ -107,8 +107,8 @@ class AppUI(Frame):
 
     def update(self, c, p, cf, bf, std):
         self.progress.step(p)
-        self.average_fitness_value.configure(text=str(cf))
-        self.best_fitness_value.configure(text=str(bf))
+        self.average_fitness_value.configure(text=str("%.3f" %cf))
+        self.best_fitness_value.configure(text=str("%.3f" %bf))
         self.cycles_value.configure(text=str(c))
         self.graph.add(c, bf, cf, std)
 
