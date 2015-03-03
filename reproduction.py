@@ -30,6 +30,14 @@ class AbstractParentSelection(metaclass=ABCMeta):
         mate_pool = []
         for i in range(int(m/2)):
             mate_pool.append(self._weighted_parent_choice(population, probs))
+        best = max(population, key=lambda x: x.fitness)
+        occ = 0
+        for a, b in mate_pool:
+            if a is best:
+                occ += 1
+            if b is best:
+                occ += 1
+        print(occ)
         return mate_pool
 
 
@@ -39,7 +47,6 @@ class ParentFitnessProportionateSelection(AbstractParentSelection):
         fitness = list(adult.fitness for adult in population)
         total = sum(fitness)
         probs = list(f/total for f in fitness)
-
         return self._global_weighted_select(population, probs, m)
 
 
