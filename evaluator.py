@@ -73,10 +73,19 @@ class SurprisingFitnessEvaluator(AbstractFitnessEvaluator):
         print(self.s)
 
     def evaluate(self, individual):
+        #Locally implementation first, since its easier
         p = individual.phenotype_container.phenotype
         total = (len(p)-1)*(len(p))/2
         #Integer phenotype,
         #Penality for nr of not surprising errors
+        found_sequences = {}
+        errors = 0
+        for i in range(p):
+            seq = str(p[i]) +',' + str(p[i+1])
+            if seq in found_sequences:
+                errors += 1
+            else:
+                found_sequences[seq] = (i, i+1)
 
-        score = 0
+        score = 1 - errors/(len(p)-1)
         return score

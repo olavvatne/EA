@@ -14,9 +14,13 @@ class Individual(object):
         self.phenotype_container = self.translator.develop(self)
 
     def mate(self, partner):
-        g1, g2 = GeneticOperators.crossover(self.genotype_container, partner.genotype_container)
-        g1 = GeneticOperators.muatation(g1)
-        g2 = GeneticOperators.muatation(g2)
+        #g1, g2 = GeneticOperators.crossover(self.genotype_container, partner.genotype_container)
+        #g1 = GeneticOperators.muatation(g1)
+        #g2 = GeneticOperators.muatation(g2)
+        g1 = self.genotype_container.crossover(partner.genotype_container)
+        g2 = partner.genotype_container.crossover(self.genotype_container)
+        g1.mutation()
+        g2.mutation()
         return Individual(g1, self.translator), Individual(g2, self.translator)
 
     def copy(self):
