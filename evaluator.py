@@ -65,11 +65,10 @@ class LeadingFitnessEvaluator(AbstractFitnessEvaluator):
 
 
 class SurprisingFitnessEvaluator(AbstractFitnessEvaluator):
-    #For LOLZ prefix problem
+    #For Surprising sequence problem
 
-    def __init__(self, s=4, locally=False):
+    def __init__(self, locally=False):
         #Checkbox or something to indicate global or local
-        self.s = s
         self.locally = locally
 
     def evaluate(self, individual):
@@ -95,6 +94,10 @@ class SurprisingFitnessEvaluator(AbstractFitnessEvaluator):
                     errors += 1
                 else:
                     found_sequences[seq] = (i, i+k)
-
+            #print("IT: ", k, " errors: ", errors )
+        if errors == 0:
+            print("NO ERRORS!!!!")
+        #print(errors)
         score = 1 - errors/total
+        #score = 1/(1.+errors)
         return score

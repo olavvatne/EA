@@ -5,8 +5,8 @@
             "order": 1,
             "class_name": "BitVectorGenotype",
             "parameters": {
-                "crossover_rate": 0.65,
-                "mutation_rate": 0.5
+                "crossover_rate": 1,
+                "mutation_rate": 0.01
             }
         }
     },
@@ -40,22 +40,34 @@
         "proportionate": {
             "name": "Proportionate scaling",
             "order": 1,
-            "class_name": "ParentFitnessProportionateSelection"
+            "class_name": "ParentFitnessProportionateSelection",
+            "parameters": {
+
+            }
         },
         "sigma": {
             "name": "Sigma scaling",
             "order": 2,
-            "class_name": "ParentSigmaScalingSelection"
+            "class_name": "ParentSigmaScalingSelection",
+            "parameters": {
+
+            }
         },
         "boltzmann": {
             "name": "Boltzmann scaling",
             "order": 3,
-            "class_name": "ParentBoltzmannSelection"
+            "class_name": "ParentBoltzmannSelection",
+            "parameters": {
+            }
         },
         "tournament": {
             "name": "Local tournament",
             "order": 4,
-            "class_name": "ParentTournamentSelection"
+            "class_name": "ParentTournamentSelection",
+            "parameters": {
+                "k": 8,
+                "e": 0.2
+            }
         }
     },
     "adult_selection": {
@@ -97,8 +109,7 @@
             "order": 3,
             "class_name": "SurprisingFitnessEvaluator",
             "parameters": {
-                "s": 4,
-                "locally": true
+                "locally": false
             }
         }
     }

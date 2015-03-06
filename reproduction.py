@@ -10,8 +10,9 @@ class ParentSelectionFactory:
 
     @staticmethod
     def make_parent_selector(selector=PROPORTIONATE):
-        selectors = Configuration.get()["parent_selection"]
-        return getattr(sys.modules[__name__], selectors[selector]["class_name"])()
+        selected = Configuration.get()["parent_selection"][selector]
+        config = selected['parameters']
+        return getattr(sys.modules[__name__], selected["class_name"])(**config)
 
 
 class AbstractParentSelection(metaclass=ABCMeta):
@@ -47,8 +48,7 @@ class ParentSigmaScalingSelection(AbstractParentSelection):
     def select_mating_pool(self, population, m, t=1):
         fitness_list = list(a.fitness for a in population)
         avg = sum(fitness_list)/len(population)
-        std = np.std(fitness_list)
-        #todo: If std is zero all prob is equal
+        std = max(0.0001, np.std(fitness_list))
         exp_values = list((1+((f -avg)/(2*std))) for f in fitness_list)
 
         for i, v in enumerate(exp_values):
@@ -73,22 +73,24 @@ class ParentBoltzmannSelection(AbstractParentSelection):
 
 class ParentTournamentSelection(AbstractParentSelection):
 
-     def select_mating_pool(self, population, m, t=1):
+    def __init__(self, k=8, e=0.2):
+        self.k = k
+        self.e = e
+
+    def select_mating_pool(self, population, m, t=1):
         #Groups with k adults, fitness compared
         #1-error best fit chosen, and error a random choice
         #Should e decrease with temperature?
-        #TODO: Set parameter from GUI
-        k = 5
-        e = 0.1
-        tournaments = [population[i:i + k] for i in range(0, len(population), k)]
+
+        tournaments = [population[i:i + self.k] for i in range(0, len(population), self.k)]
         mate_pool = []
         for i in range(int(m/2)):
-            t1 = self._conduct_tournament_selection(tournaments[(i)%len(tournaments)], e)
-            t2 = self._conduct_tournament_selection(tournaments[(i)%len(tournaments)], e)
+            t1 = self._conduct_tournament_selection(tournaments[(i)%len(tournaments)], self.e)
+            t2 = self._conduct_tournament_selection(tournaments[(i)%len(tournaments)], self.e)
             mate_pool.append((t1, t2))
         return mate_pool
 
-     def _conduct_tournament_selection(self, tournament, e):
+    def _conduct_tournament_selection(self, tournament, e):
         n = random.random()
         if n < e:
             return random.choice(tournament)

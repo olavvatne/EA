@@ -56,9 +56,10 @@ class BitVectorGenotype(AbstractGenotype):
 
     def mutation(self):
         #Single bit mutation
-        if random.random() < self.mutation_rate:
-            mutation_point = math.floor(random.uniform(0, self.genotype.size))
-            self.genotype[mutation_point] = not self.genotype[mutation_point]
+        for i in range(self.genotype.size):
+            if random.random() < self.mutation_rate:
+                #mutation_point = math.floor(random.uniform(0, self.genotype.size))
+                self.genotype[i] = not self.genotype[i]
 
     def crossover(self, partner):
         crossover = math.floor(random.uniform(0, self.genotype.size))
