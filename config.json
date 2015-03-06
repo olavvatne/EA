@@ -32,8 +32,8 @@
             "order": 3,
             "class_name": "BinToSymbolTranslator",
             "parameters": {
-                "s": 4,
-                "locally": false
+                "s": 2,
+                "locally": true
             }
         }
     },

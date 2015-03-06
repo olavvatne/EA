@@ -70,22 +70,32 @@ class SurprisingFitnessEvaluator(AbstractFitnessEvaluator):
     def __init__(self, s=4, locally=False):
         #Checkbox or something to indicate global or local
         self.s = s
-        print(self.s)
+        self.locally = locally
 
     def evaluate(self, individual):
         #Locally implementation first, since its easier
         p = individual.phenotype_container.phenotype
-        total = (len(p)-1)*(len(p))/2
-        #Integer phenotype,
-        #Penality for nr of not surprising errors
-        found_sequences = {}
-        errors = 0
-        for i in range(p):
-            seq = str(p[i]) +',' + str(p[i+1])
-            if seq in found_sequences:
-                errors += 1
-            else:
-                found_sequences[seq] = (i, i+1)
+        total = None
+        iteration = None
+        if self.locally:
+            total = len(p)-1
+            iteration = 1
+        else:
+            iteration =len(p)
+            total = ((len(p)-1)*(len(p))/2)
 
-        score = 1 - errors/(len(p)-1)
+
+        #Penality for nr of not surprising errors
+        errors = 0
+        for k in range(1, iteration):
+            found_sequences = {}
+            for i in range(len(p)-k):
+                #print("i: ", i, " j ", i+k)
+                seq = str(p[i]) + "," + str(p[i+k])
+                if seq in found_sequences:
+                    errors += 1
+                else:
+                    found_sequences[seq] = (i, i+k)
+
+        score = 1 - errors/total
         return score

@@ -12,6 +12,7 @@ class TranslatorFactory:
     def make_fitness_translator(translator=DEFAULT):
         selected = Configuration.get()["translator"][translator]
         config = selected["parameters"]
+        print(config)
         return getattr(sys.modules[__name__], selected["class_name"])(**config)
 
 
@@ -50,7 +51,7 @@ class BinToIntTranslator(AbstractTranslator):
 
 class BinToSymbolTranslator(AbstractTranslator):
 
-    def __init__(self, s=4):
+    def __init__(self, s=4, locally="local"):
         self.nr_of_symbols = s
         self.b = math.ceil(math.log2(self.nr_of_symbols))#Gray bits to support nr of symbols
 
@@ -60,7 +61,7 @@ class BinToSymbolTranslator(AbstractTranslator):
         #Use gray encoding so that a bit change will not
         #Possibly better for integers, and not symbols that has no appearant relations
         #TODO: modulo a good idea???
-        symbol_list = [self._g2i(p[i:i + self.b])%self.nr_of_symbols for i in range(0, len(p), self.b)]
+        symbol_list = [(self._g2i(p[i:i + self.b]))%self.nr_of_symbols for i in range(0, len(p), self.b)]
         return IntegerPhenotype(np.array(symbol_list))
 
     def _g2i(self, l):

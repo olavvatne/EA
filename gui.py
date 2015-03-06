@@ -27,17 +27,26 @@ class AppUI(Frame):
 
         menu = Menu(self.menubar, tearoff=0)
         self.menubar.add_cascade(label="Simulator", menu=menu)
+        menu.add_command(label="Settings", command=lambda: open_configuration(), accelerator="Ctrl+A")
+        master.bind("<Control-a>", lambda event: open_configuration())
         menu.add_command(label="Run", command=lambda: run_pressed(), accelerator="Ctrl+R")
         master.bind("<Control-r>", lambda event: run_pressed())
         menu.add_command(label="Stop", command=lambda: stop_pressed(), accelerator="Ctrl+S")
         master.bind("<Control-s>", lambda event: stop_pressed())
 
+        options = Configuration.get()
         def run_pressed():
             run_ea()
 
         def stop_pressed():
             stop_ea()
 
+        def open_configuration():
+            d = ConfigurationDialog(master, options)
+            master.wait_window(d.top)
+            value = d.result
+            print(value)
+            #Save configuration
         try:
             self.master.config(menu=self.menubar)
         except AttributeError:
@@ -62,15 +71,11 @@ class AppUI(Frame):
             self.elements[e["name"]].grid(row=i+1, column=0, padx=4, pady=4, sticky="WE")
             self.rowconfigure(i+1,weight=1)
 
-        options = Configuration.get()
         for i in range(4,len(gui_control_elements)):
             e = gui_control_elements[i]
             self.elements[e["name"]] = LabelledSelect(self, self.option_list(options[e["name"]]), e["label"])
             self.elements[e["name"]].grid(row=i+1, column=0, padx=4, pady=4, sticky="WE")
             self.rowconfigure(i+1,weight=1)
-
-
-
 
         self.average_fitness = Label(self, text="Avg fitness: ")
         self.average_fitness.grid(row=0, column=1, sticky=W ,padx=2, pady=4)
@@ -108,6 +113,31 @@ class AppUI(Frame):
         self.best_fitness_value.configure(text=str("%.3f" %bf))
         self.cycles_value.configure(text=str(c))
         self.graph.add(c, bf, cf, std)
+
+class ConfigurationDialog(object):
+    def __init__(self, parent, config):
+
+        top = self.top = Toplevel(parent)
+        #Todo: Make good configuration popup
+        #Maybe use panes for each module of the eA
+        Label(top, text="Configuration").pack()
+        for module_name, module in config.items():
+            for element_name, element in module.items():
+                if "parameters" in element:
+                    t = element["parameters"]
+                    header = Label(top, text=element_name)
+                    header.pack(padx=5)
+                    for i in t.keys():
+                        lab = LabelledEntry(top, i, t[i])
+                        lab.pack(padx=5)
+
+        self.config = config
+        b = Button(top, text="OK", command=self.ok)
+        b.pack(pady=5)
+
+    def ok(self):
+        self.result = self.config
+        self.top.destroy()
 
 class LabelledSelect(Frame):
     def __init__(self, parent, options, label_text, *args, **kwargs):
