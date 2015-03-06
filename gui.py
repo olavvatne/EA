@@ -230,6 +230,7 @@ def stop_ea(*args):
 
 
 def run_ea(*args):
+    Configuration.reload()
     ea_system.setup(app.elements["translator"].get(),
                  app.elements["fitness"].get(),
                  app.elements["genotype"].get(),

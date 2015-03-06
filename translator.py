@@ -51,7 +51,7 @@ class BinToIntTranslator(AbstractTranslator):
 
 class BinToSymbolTranslator(AbstractTranslator):
 
-    def __init__(self, s=4, locally="local"):
+    def __init__(self, s=4):
         self.nr_of_symbols = s
         self.b = math.ceil(math.log2(self.nr_of_symbols))#Gray bits to support nr of symbols
 

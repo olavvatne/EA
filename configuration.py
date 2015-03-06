@@ -23,3 +23,7 @@ class Configuration:
     @staticmethod
     def get():
         return Configuration.config
+
+    @staticmethod
+    def reload():
+        Configuration.init()

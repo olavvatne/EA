@@ -79,11 +79,10 @@ class SurprisingFitnessEvaluator(AbstractFitnessEvaluator):
         iteration = None
         if self.locally:
             total = len(p)-1
-            iteration = 1
+            iteration = 2
         else:
             iteration =len(p)
             total = ((len(p)-1)*(len(p))/2)
-
 
         #Penality for nr of not surprising errors
         errors = 0

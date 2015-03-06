@@ -32,8 +32,7 @@
             "order": 3,
             "class_name": "BinToSymbolTranslator",
             "parameters": {
-                "s": 2,
-                "locally": true
+                "s": 4
             }
         }
     },
@@ -98,7 +97,8 @@
             "order": 3,
             "class_name": "SurprisingFitnessEvaluator",
             "parameters": {
-                "s": 2
+                "s": 4,
+                "locally": true
             }
         }
     }
