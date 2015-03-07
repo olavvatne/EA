@@ -118,18 +118,21 @@ class ConfigurationDialog(object):
     def __init__(self, parent, config):
 
         top = self.top = Toplevel(parent)
-        #Todo: Make good configuration popup
-        #Maybe use panes for each module of the eA
-        Label(top, text="Configuration").pack()
+        top.title("EA solver - Configuration")
+        panes = ttk.Notebook(top)
+        panes.pack()
+
         for module_name, module in config.items():
+            sub = Frame(panes)
+            panes.add(sub, text=module_name)
             for element_name, element in module.items():
                 if "parameters" in element:
                     t = element["parameters"]
-                    header = Label(top, text=element_name)
-                    header.pack(padx=5)
+                    header = Label(sub, text=element_name,font=("Helvatica", 10, "bold"))
+                    header.pack(padx=5, anchor=W)
                     for i in t.keys():
-                        lab = LabelledEntry(top, i, t[i])
-                        lab.pack(padx=5)
+                        lab = LabelledEntry(sub, i, t[i])
+                        lab.pack(padx=5, fill="both")
 
         self.config = config
         b = Button(top, text="OK", command=self.ok)
