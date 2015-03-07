@@ -1,16 +1,19 @@
 from tkinter import *
 from tkinter import ttk
-from configuration import Configuration
-from elements import Graph, LabelledEntry, LabelledSelect, ConfigurationDialog
-import matplotlib.animation as animation
-import cProfile
-
-from ea import EA
-
 import threading
+
+import matplotlib.animation as animation
+
+from config.configuration import Configuration
+from gui.elements import Graph, LabelledEntry, LabelledSelect, ConfigurationDialog
+from ea.ea import EA
+
 
 class AppUI(Frame):
     def __init__(self, master=None):
+        master.columnconfigure(0, weight=1)
+        master.rowconfigure(0, weight=1)
+        master.title("EA problem solver system")
         Frame.__init__(self, master, relief=SUNKEN, bd=2, highlightthickness=0)
         self.grid(sticky=N+S+E+W)
 
@@ -140,10 +143,7 @@ def onExit(*args):
 
 
 root = Tk()
-root.columnconfigure(0, weight=1)
-root.rowconfigure(0, weight=1)
-root.title("EA problem solver system")
-app = AppUI(root)
+app = AppUI(master=root)
 root.bind('<Return>', run_ea)
 ea_system = EA()
 ani = animation.FuncAnimation(app.graph.f, app.graph.animate, interval=1000)

@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 import numpy as np
 import sys
-from configuration import Configuration
+from config.configuration import Configuration
 
 class FitnessEvaluatorFactory:
     DEFAULT = "default"

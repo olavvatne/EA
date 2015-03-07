@@ -1,4 +1,3 @@
-from operators import GeneticOperators
 class Individual(object):
 
     def __init__(self, genotype, translator):

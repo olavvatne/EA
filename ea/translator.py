@@ -1,9 +1,12 @@
 from abc import ABCMeta, abstractmethod
-import numpy as np
-from phenotype import IntegerPhenotype
 import sys
 import math
-from configuration import Configuration
+
+import numpy as np
+
+from ea.phenotype import IntegerPhenotype
+from config.configuration import Configuration
+
 
 class TranslatorFactory:
     DEFAULT = "default"

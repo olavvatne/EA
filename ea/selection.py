@@ -1,6 +1,6 @@
 from abc import ABCMeta, abstractmethod
 import sys
-from configuration import Configuration
+from config.configuration import Configuration
 class AdultSelectionFactory:
     FULL = "full"
 

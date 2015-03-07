@@ -1,10 +1,12 @@
-from genotype import GenotypeFactory
-from translator import TranslatorFactory
-from evaluator import FitnessEvaluatorFactory
-from individual import Individual
-from selection import AdultSelectionFactory
-from reproduction import ParentSelectionFactory
 import numpy as np
+
+from ea.genotype import GenotypeFactory
+from ea.translator import TranslatorFactory
+from ea.evaluator import FitnessEvaluatorFactory
+from ea.individual import Individual
+from ea.selection import AdultSelectionFactory
+from ea.reproduction import ParentSelectionFactory
+
 
 class EA(object):
     #Highly parameterized, should be able to change all parameters, through gui

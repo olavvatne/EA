@@ -3,7 +3,7 @@ import math
 import numpy as np
 import random
 import sys
-from configuration import Configuration
+from config.configuration import Configuration
 
 class ParentSelectionFactory:
     PROPORTIONATE = "proportionate"

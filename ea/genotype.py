@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 import numpy as np
 import sys, random, math
-from configuration import Configuration
+from config.configuration import Configuration
 
 class GenotypeFactory:
     DEFAULT = "default"
