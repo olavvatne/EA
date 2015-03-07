@@ -17,9 +17,6 @@ class ParentSelectionFactory:
 
 class AbstractParentSelection(metaclass=ABCMeta):
 
-    #TODO: Let EA loop update variables here, so more modularity for subclasses
-    #TODO: update parameters method
-
     @abstractmethod
     def select_mating_pool(self, adults, m):
         pass

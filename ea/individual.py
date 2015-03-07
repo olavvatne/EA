@@ -4,7 +4,7 @@ class Individual(object):
         self.genotype_container = genotype
         self.translator = translator
         self.phenotype_container = None
-        self.fitness = 0 #TODO: 0 here?
+        self.fitness = None
         self.adult = False
         #TODO: Counter to seperate old and young adults?
 
