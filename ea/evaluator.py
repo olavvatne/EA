@@ -42,7 +42,7 @@ class DefaultFitnessEvaluator(AbstractFitnessEvaluator):
 
     def evaluate(self, individual):
         p = individual.phenotype_container.phenotype
-        d = sum(not (bool(p[i]) ^ bool(self.target[i])) for i in range(p.size))
+        d = sum(p[i] == self.target[i] for i in range(p.size))
         return (d / p.size)
 
 
