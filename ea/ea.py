@@ -29,10 +29,28 @@ class EA(object):
         self.adult_pool = []
 
     def add_listener(self, listener):
+        '''
+        The EA will during the run send updates containing best fitness average fitness etc.
+        A listner can be supplied to the object that will receive these updates. Currently only AppUI that
+        contain functions neccessary.
+        '''
         self.listener = listener
 
     def run(self, population_size, cycles, fitness_threshold):
+        '''
+        Run will run the actual evolutionary algorithm. The number of generations or cycles, stopping condition
+        and inital population size are decided by the method arguments.
+
+        A basic generation loop consist of:
+        -Development of children. (Construct a phenotype from their genotype)
+        -Evaluate developed children's fitness
+        -Select who should participate in the adult pool. (All other individuals die off)
+        -Select mating pairs (Who get to reproduce. Sexual reproduction so mate pool consist of tuples)
+        -Create children. (Mutation and crossover)
+        -Send update to GUI (every 10th cycle)
+        '''
         print("-------------------------")
+        self.is_stopping = False
 
         if not self.is_legal():
             raise RuntimeError("Cannot run EA. Lack neccessary objects")
@@ -49,9 +67,8 @@ class EA(object):
             children = self.reproduce(mating_adults)
 
             #Check stopping condition, and gui update below
-            best_individual = self.best_individual(self.adult_pool)
+            best_individual = max(self.adult_pool, key=lambda a: a.fitness)
             if self.is_stopping or fitness_threshold <= best_individual.fitness:
-                self.is_stopping = False
                 break
 
             if self.listener and c%EA.EVENT_RATE == 0:
@@ -60,27 +77,36 @@ class EA(object):
                 self.send_update(c, cycles, best_individual)
 
         #Final update
-        best_individual = self.best_individual(self.adult_pool)
+        best_individual = max(self.adult_pool, key=lambda a: a.fitness)
         self.send_update(c+1, cycles, best_individual)
         print("-------------------------")
 
     def stop(self):
+        '''
+        Calling stop will stop an EA in progress. Will stop the ea loop.
+        '''
         self.is_stopping = True
 
     def send_update(self, c, cycles, best):
-        avg_fitness = self.avg_fitness(self.adult_pool)
+        '''
+        Summary information for cycle c, and send to the listner's update function. (AppUI)
+        Sends:
+        -Cycle the EA is currently working on
+        -Generations since last update
+        -Average fitness of the population
+        -Best fitness of the population
+        -Standard deviation of the population
+        '''
+        avg_fitness = sum(individual.fitness for individual in self.adult_pool)/len(self.adult_pool)
         std = np.std(list(a.fitness for a in self.adult_pool))
         print("C: ", c, "B_f: ", best.fitness, " A_f: ", avg_fitness, " std: ", std, "P: ", best.phenotype_container)
         self.listener.update(c, 1/cycles * 100 * EA.EVENT_RATE, avg_fitness, best.fitness, std)
 
-    def best_individual(self, adults):
-        return max(adults, key=lambda a: a.fitness)
-
-    def avg_fitness(self, population):
-        tot_fitness = sum(individual.fitness for individual in population)
-        return tot_fitness/len(population)
-
     def create_population(self, n):
+        '''
+        Create's an initial population. An individual's genotype is created and retrieved from
+        GenoTypeFactory. The genotype is initalized to a completely random genome.
+        '''
         population = []
         for i in range(n):
             genotype = GenotypeFactory.make_fitness_genotype(self.genotype)
@@ -89,17 +115,31 @@ class EA(object):
             population.append(individual)
         return population
 
-    def geno_to_pheno_development(self, population):
-        for individual in population:
+    def geno_to_pheno_development(self, children):
+        '''
+        Develop all individual's in the children list, which means that a phenotype is created for
+        all children in the list.
+        '''
+        for individual in children:
             individual.devlop()
 
     def reproduce(self, mating_adults):
+        '''
+        Reproduce returns a list of children, created by the mating adults. Mating_adults argument contain
+        tuples of two individuals selected to mate by the reproduction parent selector. Each mating produce
+        2 children, which is extended to the children list.
+        '''
         children = []
         for a1, a2 in mating_adults:
             children.extend(a1.mate(a2))
         return children
 
     def setup(self, geno_to_pheno, evaluator, geno, adult, parent, genome_length):
+        '''
+        This EA is highly parameterized, and setup help keep it this way. User supply strings that decide what
+        type of translator, evaluator, genotype, adult selection and parent selection. Different factories are
+        then used to initialize object's corresponding to the user's choice's.
+        '''
         self.translator = TranslatorFactory.make_fitness_translator(geno_to_pheno)
         self.fitness_evaluator = FitnessEvaluatorFactory.make_fitness_evaluator(genome_length, evaluator)
         self.genotype = geno
@@ -108,5 +148,9 @@ class EA(object):
         self.parent_selector = ParentSelectionFactory.make_parent_selector(parent)
 
     def is_legal(self):
+        '''
+        Checks that the EA have initialized objects of all required modules, like adult selection, parent selection,
+        fitness evaluator and translator.
+        '''
         return self.translator and self.fitness_evaluator and self.adult_selector and self.parent_selector
 

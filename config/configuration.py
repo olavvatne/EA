@@ -37,7 +37,7 @@ class Configuration:
         '''
         If changes has been made to config.json through the GUI, the changes is persisted by calling
         store with the new configuration. The argument should have the same structure as config.json.
-        Only key value pairs define inside a parameters dict, is persisted. 
+        Only key value pairs define inside a parameters dict, is persisted.
         '''
         json_data = open('config.json', 'w')
         data = Configuration.config
