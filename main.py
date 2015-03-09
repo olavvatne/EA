@@ -133,6 +133,8 @@ def run_ea(*args):
         threshold = app.elements["threshold"].get_special()
         ea_system.run(pop_size, gen, threshold)
         app.progress.stop()
+        app.graph.dump()
+
     t = threading.Thread(target=callback)
     t.daemon = True
     t.start()

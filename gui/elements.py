@@ -5,10 +5,10 @@ matplotlib.use("TkAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
 from matplotlib.figure import Figure
 from matplotlib import style
+import csv
 style.use('ggplot')
 
 class Graph(Frame):
-    #TODO: Clean up code
 
     def __init__(self, parent):
         Frame.__init__(self, parent)
@@ -46,6 +46,13 @@ class Graph(Frame):
         self.bf_list = []
         self.af_list = []
         self.std_list = []
+
+    def dump(self):
+        file = open("dump.csv", "w")
+        writer = csv.writer(file, delimiter=',', lineterminator='\n')
+        data = zip(self.x_list, self.bf_list, self.af_list, self.std_list)
+        writer.writerows(data)
+        file.close()
 
 class ConfigurationDialog(object):
     def __init__(self, parent, config):
