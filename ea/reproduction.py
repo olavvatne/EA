@@ -34,7 +34,7 @@ class AbstractParentSelection(metaclass=ABCMeta):
 
 class ParentFitnessProportionateSelection(AbstractParentSelection):
 
-     def select_mating_pool(self, population, m, t=1):
+    def select_mating_pool(self, population, m, t=1):
         fitness = list(adult.fitness for adult in population)
         total = sum(fitness)
         probs = list(f/total for f in fitness)

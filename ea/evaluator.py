@@ -7,15 +7,15 @@ class FitnessEvaluatorFactory:
     DEFAULT = "default"
 
     @staticmethod
-    def make_fitness_evaluator(evaluator=DEFAULT):
+    def make_fitness_evaluator(genome_length, evaluator=DEFAULT):
         selected = Configuration.get()["fitness"][evaluator]
         config = selected["parameters"]
-        return getattr(sys.modules[__name__], selected["class_name"])(**config)
+        return getattr(sys.modules[__name__], selected["class_name"])(genome_length, **config)
 
 
 class AbstractFitnessEvaluator(metaclass=ABCMeta):
 
-    def __init__(self, **kwargs):
+    def __init__(self, genome_length, **kwargs):
         pass
 
     @abstractmethod
@@ -33,18 +33,23 @@ class DefaultFitnessEvaluator(AbstractFitnessEvaluator):
     #For the simple problem. Put this here so the EA works without extension classes
     NUMBER_ONE = 1
 
-    def __init__(self, **kwargs):
-        pass
+    def __init__(self, genome_length, random_target=False):
+        if random_target:
+            self.target = np.random.randint(2, size=genome_length)
+            print("RANDOM TARGET: ", self.target)
+        else:
+            self.target = np.ones(genome_length, dtype=np.int)
 
     def evaluate(self, individual):
         p = individual.phenotype_container.phenotype
-        return (np.sum(p) / p.size)
+        d = sum(not (bool(p[i]) ^ bool(self.target[i])) for i in range(p.size))
+        return (d / p.size)
 
 
 class LeadingFitnessEvaluator(AbstractFitnessEvaluator):
     #For LOLZ prefix problem
 
-    def __init__(self, z=4):
+    def __init__(self, genome_length, z=4):
         self.z = z
 
     def evaluate(self, individual):
@@ -67,7 +72,7 @@ class LeadingFitnessEvaluator(AbstractFitnessEvaluator):
 class SurprisingFitnessEvaluator(AbstractFitnessEvaluator):
     #For Surprising sequence problem
 
-    def __init__(self, locally=False):
+    def __init__(self, genome_length, locally=False):
         #Checkbox or something to indicate global or local
         self.locally = locally
 
@@ -88,16 +93,14 @@ class SurprisingFitnessEvaluator(AbstractFitnessEvaluator):
         for k in range(1, iteration):
             found_sequences = {}
             for i in range(len(p)-k):
-                #print("i: ", i, " j ", i+k)
+
                 seq = str(p[i]) + "," + str(p[i+k])
                 if seq in found_sequences:
                     errors += 1
                 else:
                     found_sequences[seq] = (i, i+k)
-            #print("IT: ", k, " errors: ", errors )
-        if errors == 0:
-            print("NO ERRORS!!!!")
-        #print(errors)
+
+
         score = 1 - errors/total
         #score = 1/(1.+errors)
         return score

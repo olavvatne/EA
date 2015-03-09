@@ -68,7 +68,6 @@ class EA(object):
         self.is_stopping = True
 
     def send_update(self, c, cycles, best):
-        #TODO: MESSY
         avg_fitness = self.avg_fitness(self.adult_pool)
         std = np.std(list(a.fitness for a in self.adult_pool))
         print("C: ", c, "B_f: ", best.fitness, " A_f: ", avg_fitness, " std: ", std, "P: ", best.phenotype_container)
@@ -102,7 +101,7 @@ class EA(object):
 
     def setup(self, geno_to_pheno, evaluator, geno, adult, parent, genome_length):
         self.translator = TranslatorFactory.make_fitness_translator(geno_to_pheno)
-        self.fitness_evaluator = FitnessEvaluatorFactory.make_fitness_evaluator(evaluator)
+        self.fitness_evaluator = FitnessEvaluatorFactory.make_fitness_evaluator(genome_length, evaluator)
         self.genotype = geno
         self.genome_length = genome_length
         self.adult_selector = AdultSelectionFactory.make_adult_selector(adult)
