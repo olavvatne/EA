@@ -74,6 +74,7 @@ class EA(object):
             if self.listener and c%EA.EVENT_RATE == 0:
                 #Sends an update every 10th cycle. Fraction multiplied by 100 and 10 (10th cyle)
                 #send to indicate evolution loop progression.
+                print(self.adult_pool)
                 self.send_update(c, cycles, best_individual)
 
         #Final update
