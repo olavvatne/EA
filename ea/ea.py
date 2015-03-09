@@ -53,7 +53,7 @@ class EA(object):
         self.is_stopping = False
 
         if not self.is_legal():
-            raise RuntimeError("Cannot run EA. Lack neccessary objects")
+            raise RuntimeError("Cannot run EA. Lack necessary objects")
 
         children = self.create_population(population_size)  #Inital population
         self.adult_pool = []
