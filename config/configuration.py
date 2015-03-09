@@ -6,10 +6,14 @@ class Configuration:
 
     @staticmethod
     def init():
-        #TODO: try catch and exception handling
-        json_data = open('config.json')
-        Configuration.config = json.load(json_data)
-        json_data.close()
+        try:
+            json_data = open('config.json')
+            Configuration.config = json.load(json_data)
+            json_data.close()
+        except:
+            raise RuntimeError("Cant open config file")
+
+
 
     @staticmethod
     def get():
