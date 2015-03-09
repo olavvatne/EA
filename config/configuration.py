@@ -6,6 +6,10 @@ class Configuration:
 
     @staticmethod
     def init():
+        '''
+        Initialize static variable config by reading config.json. All parameters are defined in this file,
+        and will persist changes.
+        '''
         try:
             json_data = open('config.json')
             Configuration.config = json.load(json_data)
@@ -17,6 +21,9 @@ class Configuration:
 
     @staticmethod
     def get():
+        '''
+        Method returns configurations. If not loaded calls init()
+        '''
         if not Configuration.config:
             Configuration.init()
         return Configuration.config
@@ -27,6 +34,11 @@ class Configuration:
 
     @staticmethod
     def store(config):
+        '''
+        If changes has been made to config.json through the GUI, the changes is persisted by calling
+        store with the new configuration. The argument should have the same structure as config.json.
+        Only key value pairs define inside a parameters dict, is persisted. 
+        '''
         json_data = open('config.json', 'w')
         data = Configuration.config
         p = "parameters"
