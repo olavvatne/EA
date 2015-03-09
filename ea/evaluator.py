@@ -9,8 +9,8 @@ class FitnessEvaluatorFactory:
     @staticmethod
     def make_fitness_evaluator(genome_length, evaluator=DEFAULT):
         '''
-        Factory method create object by supplied string argument, evaluator. Configurations are also retrieved
-        and supplied as kwarg argument for the object.
+        Factory method create object by the supplied string argument, evaluator.
+        Configurations are also retrieved and supplied as a kwarg argument for the object.
         '''
         selected = Configuration.get()["fitness"][evaluator]
         config = selected["parameters"]
