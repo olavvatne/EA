@@ -7,7 +7,7 @@ import matplotlib.animation as animation
 from config.configuration import Configuration
 from gui.elements import Graph, LabelledEntry, LabelledSelect, ConfigurationDialog
 from ea.ea import EA
-
+import cProfile
 
 class AppUI(Frame):
     def __init__(self, master=None):
@@ -39,9 +39,11 @@ class AppUI(Frame):
             stop_ea()
 
         def open_configuration():
+            options = Configuration.get()
             d = ConfigurationDialog(master, options)
             master.wait_window(d.top)
-            Configuration.store(d.result)
+            if d.result:
+                Configuration.store(d.result)
 
         try:
             self.master.config(menu=self.menubar)
@@ -146,6 +148,6 @@ root = Tk()
 app = AppUI(master=root)
 root.bind('<Return>', run_ea)
 ea_system = EA()
-ani = animation.FuncAnimation(app.graph.f, app.graph.animate, interval=1000)
+ani = animation.FuncAnimation(app.graph.f, app.graph.animate, interval=2000)
 ea_system.add_listener(app)
 root.mainloop()

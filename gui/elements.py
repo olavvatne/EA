@@ -55,6 +55,7 @@ class ConfigurationDialog(object):
         panes = ttk.Notebook(top)
         panes.pack()
         param = "parameters"
+        self.result = None
         self.config = config
         self.elements = config.copy()
         for module_name, module in config.items():
@@ -118,8 +119,8 @@ class LabelledEntry(Frame):
             return int(v)
         elif self._is_float(v):
             return float(v)
-        elif v == 'True' or 'False':
-            return bool(v)
+        elif v == 'True' or v == 'False':
+            return eval(v)
         else:
             raise RuntimeError(v + ". Not a number!")
 

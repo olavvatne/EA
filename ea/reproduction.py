@@ -22,12 +22,13 @@ class AbstractParentSelection(metaclass=ABCMeta):
         pass
 
     def _weighted_parent_choice(self, pop, prob):
-        return np.random.choice(pop, p=prob), np.random.choice(pop, p=prob)
+        return np.random.choice(pop, size=2, p=prob, replace=False)
 
     def _global_weighted_select(self, population, probs,  m):
         mate_pool = []
         for i in range(int(m/2)):
             mate_pool.append(self._weighted_parent_choice(population, probs))
+
         return mate_pool
 
 

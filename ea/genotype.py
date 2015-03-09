@@ -74,7 +74,7 @@ class BitVectorGenotype(AbstractGenotype):
 class SymbolGenotype(AbstractGenotype):
 
     def init_random_genotype(self, n):
-        self.genotype = np.random.randint(4, size=n)
+        self.genotype = np.random.randint(10, size=n)
 
     def copy(self):
         g = SymbolGenotype(crossover_rate=self.crossover_rate, mutation_rate=self.mutation_rate)
@@ -84,4 +84,4 @@ class SymbolGenotype(AbstractGenotype):
     def mutation(self):
         for i in range(self.genotype.size):
             if random.random() < self.mutation_rate:
-                self.genotype[i] = random.randint(0, 3)
+                self.genotype[i] = random.randint(0, 9)
