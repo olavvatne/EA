@@ -10,6 +10,9 @@ from ea.ea import EA
 import cProfile
 
 class AppUI(Frame):
+    '''
+    Main user interface of EA. Uses elements found in gui.elements. Layout of application.
+    '''
     def __init__(self, master=None):
         master.columnconfigure(0, weight=1)
         master.rowconfigure(0, weight=1)
@@ -20,7 +23,7 @@ class AppUI(Frame):
         self.menubar = Menu(self)
         menu = Menu(self.menubar, tearoff=0)
         self.menubar.add_cascade(label="File", menu=menu)
-        menu.add_command(label="Exit", command=onExit)
+        menu.add_command(label="Exit", command=on_exit)
 
         menu = Menu(self.menubar, tearoff=0)
         self.menubar.add_cascade(label="Simulator", menu=menu)
@@ -118,6 +121,10 @@ def stop_ea(*args):
 
 
 def run_ea(*args):
+    '''
+    Method configure and runs EA in it's own thread so the user interface is
+    responsive while running.
+    '''
     Configuration.reload()
     ea_system.setup(app.elements["translator"].get(),
                  app.elements["fitness"].get(),
@@ -141,9 +148,11 @@ def run_ea(*args):
 
 
 
-def onExit(*args):
-        print("TEST_EXIT")
-        root.quit()
+def on_exit(*args):
+    '''
+    Exits application
+    '''
+    root.quit()
 
 
 root = Tk()
