@@ -3,6 +3,7 @@ import numpy as np
 import sys
 from config.configuration import Configuration
 
+
 class FitnessEvaluatorFactory:
     DEFAULT = "default"
 

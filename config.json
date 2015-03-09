@@ -1,119 +1,119 @@
 {
-    "adult_selection": {
-        "over": {
-            "order": 2,
-            "class_name": "OverProductionAdultSelection",
-            "name": "Over production"
-        },
-        "mixing": {
-            "order": 3,
-            "class_name": "MixingAdultSelection",
-            "name": "Generational mixing"
-        },
-        "full": {
-            "order": 1,
-            "class_name": "FullReplacementAdultSelection",
-            "name": "Full replacement"
-        }
-    },
     "genotype": {
         "symbol": {
-            "order": 2,
             "class_name": "SymbolGenotype",
+            "order": 2,
+            "name": "Symbol",
             "parameters": {
                 "mutation_rate": 0.01,
-                "s": 10,
-                "crossover_rate": 0.7
-            },
-            "name": "Symbol"
+                "crossover_rate": 0.7,
+                "s": 10
+            }
         },
         "default": {
-            "order": 1,
             "class_name": "BitVectorGenotype",
+            "order": 1,
+            "name": "Bit Vector",
             "parameters": {
-                "mutation_rate": 0.00075,
-                "crossover_rate": 0.95
-            },
-            "name": "Bit Vector"
+                "mutation_rate": 0.008,
+                "crossover_rate": 1
+            }
         }
     },
     "parent_selection": {
+        "sigma": {
+            "class_name": "ParentSigmaScalingSelection",
+            "order": 2,
+            "name": "Sigma scaling",
+            "parameters": {}
+        },
+        "proportionate": {
+            "class_name": "ParentFitnessProportionateSelection",
+            "order": 1,
+            "name": "Proportionate scaling",
+            "parameters": {}
+        },
+        "boltzmann": {
+            "class_name": "ParentBoltzmannSelection",
+            "order": 3,
+            "name": "Boltzmann scaling",
+            "parameters": {}
+        },
         "tournament": {
-            "order": 4,
             "class_name": "ParentTournamentSelection",
+            "order": 4,
+            "name": "Local tournament",
             "parameters": {
                 "k": 16,
                 "e": 0.3
-            },
-            "name": "Local tournament"
-        },
-        "sigma": {
-            "order": 2,
-            "class_name": "ParentSigmaScalingSelection",
-            "parameters": {},
-            "name": "Sigma scaling"
-        },
-        "boltzmann": {
-            "order": 3,
-            "class_name": "ParentBoltzmannSelection",
-            "parameters": {},
-            "name": "Boltzmann scaling"
-        },
-        "proportionate": {
-            "order": 1,
-            "class_name": "ParentFitnessProportionateSelection",
-            "parameters": {},
-            "name": "Proportionate scaling"
-        }
-    },
-    "translator": {
-        "integer": {
-            "order": 2,
-            "class_name": "BinToIntTranslator",
-            "parameters": {
-                "k": 8
-            },
-            "name": "Bit to int"
-        },
-        "symbol": {
-            "order": 3,
-            "class_name": "BinToSymbolTranslator",
-            "parameters": {
-                "s": 10
-            },
-            "name": "Bit to symbol set"
-        },
-        "default": {
-            "order": 1,
-            "class_name": "DefaultTranslator",
-            "parameters": {},
-            "name": "Bit to bit"
+            }
         }
     },
     "fitness": {
-        "surprising": {
-            "order": 3,
-            "class_name": "SurprisingFitnessEvaluator",
-            "parameters": {
-                "locally": false
-            },
-            "name": "Surprising sequences"
-        },
-        "leading": {
-            "order": 2,
-            "class_name": "LeadingFitnessEvaluator",
-            "parameters": {
-                "z": 4
-            },
-            "name": "Leading"
-        },
         "default": {
-            "order": 1,
             "class_name": "DefaultFitnessEvaluator",
+            "order": 1,
+            "name": "Fraction",
             "parameters": {
                 "random_target": false
-            },
-            "name": "Fraction"
+            }
+        },
+        "surprising": {
+            "class_name": "SurprisingFitnessEvaluator",
+            "order": 3,
+            "name": "Surprising sequences",
+            "parameters": {
+                "locally": false
+            }
+        },
+        "leading": {
+            "class_name": "LeadingFitnessEvaluator",
+            "order": 2,
+            "name": "Leading",
+            "parameters": {
+                "z": 21
+            }
+        }
+    },
+    "translator": {
+        "symbol": {
+            "class_name": "BinToSymbolTranslator",
+            "order": 3,
+            "name": "Bit to symbol set",
+            "parameters": {
+                "s": 10
+            }
+        },
+        "default": {
+            "class_name": "DefaultTranslator",
+            "order": 1,
+            "name": "Bit to bit",
+            "parameters": {}
+        },
+        "integer": {
+            "class_name": "BinToIntTranslator",
+            "order": 2,
+            "name": "Bit to int",
+            "parameters": {
+                "k": 8
+            }
+        }
+    },
+    "adult_selection": {
+        "full": {
+            "class_name": "FullReplacementAdultSelection",
+            "order": 1,
+            "name": "Full replacement"
+        },
+        "mixing": {
+            "class_name": "MixingAdultSelection",
+            "order": 3,
+            "name": "Generational mixing"
+        },
+        "over": {
+            "class_name": "OverProductionAdultSelection",
+            "order": 2,
+            "name": "Over production"
         }
     }
 }

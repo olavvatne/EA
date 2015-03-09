@@ -4,7 +4,6 @@ import sys, random, math
 from config.configuration import Configuration
 
 
-
 class GenotypeFactory:
     DEFAULT = "default"
 
@@ -17,7 +16,6 @@ class GenotypeFactory:
         selected = Configuration.get()["genotype"][genotype]
         config = selected["parameters"]
         return getattr(sys.modules[__name__], selected["class_name"])(**config)
-
 
 
 class AbstractGenotype(metaclass=ABCMeta):
@@ -60,7 +58,6 @@ class AbstractGenotype(metaclass=ABCMeta):
         return "G:" + str(self.genotype)
 
 
-
 class BitVectorGenotype(AbstractGenotype):
     '''
      #Default genotype, consisting of bits. The bitVectorGenotype define functions for
@@ -85,12 +82,10 @@ class BitVectorGenotype(AbstractGenotype):
         '''
         Bit mutation. Every bit are considered and if a random number is below the mutation_rate the
         bit is flipped.
-
         '''
         for i in range(self.genotype.size):
             if random.random() < self.mutation_rate:
                 self.genotype[i] = not self.genotype[i]
-
 
 
 class SymbolGenotype(AbstractGenotype):
