@@ -106,6 +106,7 @@ class ParentBoltzmannSelection(AbstractParentSelection):
         exp_values contain a list of the temperature scaled fitness of each individual. These values are then
         normalized and used as probabilities for the weighted selection.
         '''
+        l = population[0].genotype_container.genotype.size
         temp = list(math.exp(a.fitness/t) for a in population)
         avg = sum(temp)/len(population)
         exp_values = list(c/avg for c in temp)

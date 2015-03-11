@@ -3,7 +3,6 @@ import numpy as np
 import sys, random, math
 from config.configuration import Configuration
 
-
 class GenotypeFactory:
     DEFAULT = "default"
 
@@ -90,15 +89,16 @@ class BitVectorGenotype(AbstractGenotype):
 
 class SymbolGenotype(AbstractGenotype):
 
-    def __init__(self, s=10, **kwargs):
+    def __init__(self, s=10, locally=False, **kwargs):
         super(SymbolGenotype, self).__init__(**kwargs)
         self.s = s
+        self.locally = locally
 
     def init_random_genotype(self, n):
         self.genotype = np.random.randint(self.s, size=n)
 
     def copy(self):
-        g = SymbolGenotype(crossover_rate=self.crossover_rate, mutation_rate=self.mutation_rate)
+        g = SymbolGenotype(crossover_rate=self.crossover_rate, mutation_rate=self.mutation_rate, s=self.s, locally=self.locally)
         g.genotype = self.genotype.copy()
         return g
 
@@ -110,4 +110,18 @@ class SymbolGenotype(AbstractGenotype):
         '''
         for i in range(self.genotype.size):
             if random.random() < self.mutation_rate:
-                self.genotype[i] = random.randint(0, self.s-1)
+                self.genotype[i] = self._mutate(self.genotype)
+
+    def _mutate(self, genome):
+        if self.locally:
+            return random.randint(0, self.s-1)
+        else:
+            l = list(range(self.s))
+            count = np.zeros(self.s)
+            for i in range(len(genome)):
+                count[genome[i]] += 1
+            s = sum(count)
+            probs = list((s-x) for x in count)
+            s = sum(probs)
+            probs = list((x/s) for x in probs)
+            return np.random.choice(l, p=probs)

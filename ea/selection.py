@@ -33,7 +33,7 @@ class FullReplacementAdultSelection(AbstractAdultSelection):
     '''
 
     def select(self, adults, children, m):
-        return children
+        return children[:m]
 
 
 class OverProductionAdultSelection(AbstractAdultSelection):
